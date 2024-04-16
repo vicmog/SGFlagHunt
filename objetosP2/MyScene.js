@@ -5,8 +5,10 @@
 import * as THREE from '../libs/three.module.js'
 import { GUI } from '../libs/dat.gui.module.js'
 import { TrackballControls } from '../libs/TrackballControls.js'
-import { Tubo } from './tubo.js'
-import { Tanque } from '../misObjetos/Tanque.js'
+import { Tanque } from './Tanque.js';
+import { Bomba } from './Bomba.js';
+import { Botiquin } from './Botiquin.js';
+
 
 
  
@@ -46,8 +48,12 @@ class MyScene extends THREE.Scene {
 
  
 
-    this.tubo = new Tubo();
-    this.add(this.tubo);
+    this.tanque = new Tanque();
+    //this.add(this.tanque);
+    this.bomba = new Bomba();
+    //this.add(this.bomba);
+    this.botiquin = new Botiquin();
+    this.add(this.botiquin);
   }
   
   createCamera () {
@@ -210,7 +216,8 @@ class MyScene extends THREE.Scene {
     this.cameraControl.update();
     
     // Se actualiza el resto del modelo
-    this.tubo.update();
+    this.tanque.update();
+    this.bomba.update();
     
     // Este método debe ser llamado cada vez que queramos visualizar la escena de nuevo.
     // Literalmente le decimos al navegador: "La próxima vez que haya que refrescar la pantalla, llama al método que te indico".
