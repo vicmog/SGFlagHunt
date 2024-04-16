@@ -66,19 +66,12 @@ class Tanque extends THREE.Object3D{
         csg.union([this.cuerpoTanque, this.]);
 
         this.tanque = csg.toMesh();*/
-
-
-        this.add(this.cuerpoTanque);
-        this.add(this.cuerpoSoporte);
-        this.add(this.cuerpoMiraTanque);
-        this.add(this.cuerpoCanionTanque);
-        this.add(this.cuerpoRecubrimentoCanionTanque);
-        this.add(this.cuerpoCupulaTanque);
-        this.add(this.cuerpoRueda1);
-        this.add(this.cuerpoRueda2);
-        this.add(this.cuerpoRueda3);
-        this.add(this.cuerpoRueda4);
-        this.add(this.cuerpoRueda5);
+        var csg = new CSG();
+        csg.union([this.cuerpoTanque, this.cuerpoSoporte, this.cuerpoMiraTanque, this.cuerpoCanionTanque, this.cuerpoRecubrimentoCanionTanque, this.cuerpoCupulaTanque, this.cuerpoRueda1, this.cuerpoRueda2, this.cuerpoRueda3, this.cuerpoRueda4, this.cuerpoRueda5]);
+        this.tanque = csg.toMesh();
+        this.tanque.scale.set(0.5, 0.5, 0.5);
+        // this.tanque.scale.set(1.5, 1.5, 1.5);
+        this.add(this.tanque);
        
 
     }
