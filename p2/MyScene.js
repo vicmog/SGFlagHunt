@@ -5,15 +5,8 @@
 import * as THREE from '../libs/three.module.js'
 import { GUI } from '../libs/dat.gui.module.js'
 import { TrackballControls } from '../libs/TrackballControls.js'
-import { Auricular } from './Auricular.js'
-import { Tuerca } from './Tuerca.js';
-import { Taza } from './Taza.js';
-import { Tanque } from './Tanque.js';
-import { Bomba } from './Bomba.js';
-import { Cascos } from './Cascos.js';
-import { Cohete } from './Cohete.js';
-import { Objeto1 } from './Objeto1.js';
-
+import { Tubo } from './tubo.js'
+import { Tanque } from '../misObjetos/Tanque.js'
 
 
  
@@ -51,18 +44,13 @@ class MyScene extends THREE.Scene {
     this.axis = new THREE.AxesHelper (10);
     this.add (this.axis);
 
+    this.tubo = new Tubo();
+    this.add(this.tubo);
+
+    // this.tanque = new Tanque();
+    // this.add(this.tanque);
  
 
-    this.tanque = new Tanque();
-    //this.add(this.tanque);
-    this.bomba = new Bomba();
-    //this.add(this.bomba);
-    this.cascos = new Cascos();
-    //this.add(this.cascos);
-    this.cohete = new Cohete();
-    //this.add(this.cohete);
-    this.obj1 = new Objeto1();
-    //this.add(this.obj1); 
   }
   
   createCamera () {
@@ -223,11 +211,9 @@ class MyScene extends THREE.Scene {
 
     // Se actualiza la posición de la cámara según su controlador
     this.cameraControl.update();
-    
+    this.tubo.update();
     // Se actualiza el resto del modelo
-    this.tanque.update();
-    this.bomba.update();
-    this.cascos.update();
+   
     
     // Este método debe ser llamado cada vez que queramos visualizar la escena de nuevo.
     // Literalmente le decimos al navegador: "La próxima vez que haya que refrescar la pantalla, llama al método que te indico".
