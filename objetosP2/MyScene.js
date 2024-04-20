@@ -10,7 +10,7 @@ import { Bomba } from './Bomba.js';
 import { Botiquin } from './Botiquin.js';
 import { Misil } from './Misil.js';
 import { Bandera } from './Bandera.js';
-
+import { Estrella } from './Estrella.js';
 
  
 /// La clase fachada del modelo
@@ -56,11 +56,13 @@ class MyScene extends THREE.Scene {
     this.botiquin = new Botiquin();
     // //this.add(this.botiquin);
     this.bandera = new Bandera();
-    this.add(this.bandera);
+    //this.add(this.bandera);
     
 
     this.misil = new Misil();
-    //this.add(this.misil);
+    // this.add(this.misil);
+    this.estrella = new Estrella();
+    this.add(this.estrella);
   }
   
   createCamera () {
