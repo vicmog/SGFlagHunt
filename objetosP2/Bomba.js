@@ -21,10 +21,13 @@ class Bomba extends THREE.Object3D {
     this.add(this.bombaCuerpo);
     this.add(this.bombaCabeza);
     this.add(this.bombaMecha);
+    
   }
 
 
   update(){
+
+
 
   }
 }

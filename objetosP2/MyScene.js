@@ -8,6 +8,7 @@ import { TrackballControls } from '../libs/TrackballControls.js'
 import { Tanque } from './Tanque.js';
 import { Bomba } from './Bomba.js';
 import { Botiquin } from './Botiquin.js';
+import { Misil } from './Misil.js';
 
 
 
@@ -53,7 +54,10 @@ class MyScene extends THREE.Scene {
     this.bomba = new Bomba();
     //this.add(this.bomba);
     this.botiquin = new Botiquin();
-    this.add(this.botiquin);
+    //this.add(this.botiquin);
+
+    this.misil = new Misil();
+    this.add(this.misil);
   }
   
   createCamera () {
