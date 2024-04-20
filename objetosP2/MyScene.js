@@ -9,7 +9,7 @@ import { Tanque } from './Tanque.js';
 import { Bomba } from './Bomba.js';
 import { Botiquin } from './Botiquin.js';
 import { Misil } from './Misil.js';
-
+import { Bandera } from './Bandera.js';
 
 
  
@@ -54,10 +54,13 @@ class MyScene extends THREE.Scene {
     this.bomba = new Bomba();
     //this.add(this.bomba);
     this.botiquin = new Botiquin();
-    //this.add(this.botiquin);
+    // //this.add(this.botiquin);
+    this.bandera = new Bandera();
+    this.add(this.bandera);
+    
 
     this.misil = new Misil();
-    this.add(this.misil);
+    //this.add(this.misil);
   }
   
   createCamera () {
