@@ -11,7 +11,7 @@ import { Botiquin } from './Botiquin.js';
 import { Misil } from './Misil.js';
 import { Bandera } from './Bandera.js';
 import { Estrella } from './Estrella.js';
-import { MuroCargado } from './MuroCargado.js';
+import { Luna } from './Luna.js';
 
  
 /// La clase fachada del modelo
@@ -62,6 +62,8 @@ class MyScene extends THREE.Scene {
     // this.add(this.misil);
     this.estrella = new Estrella();
     //this.add(this.estrella);
+    this.luna = new Luna();
+    this.add(this.luna);
   }
   
   createCamera () {
