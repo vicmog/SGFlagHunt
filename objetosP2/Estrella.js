@@ -24,6 +24,7 @@ class Estrella extends THREE.Object3D{
             bevelSegments: 30
         };
         var estrellaGeometria = new THREE.ExtrudeGeometry(shape, extrudeSettings);
+        estrellaGeometria.translate(-1, 0, 0);
         this.estrella = new THREE.Mesh(estrellaGeometria, material);
         return this.estrella;
     }
@@ -32,6 +33,9 @@ class Estrella extends THREE.Object3D{
         var material = new THREE.MeshNormalMaterial();
         this.estrella = this.createEstrella(material);
         this.add(this.estrella);
+    }
+    update(){
+        this.estrella.rotation.y += 0.01;
     }
 
 
