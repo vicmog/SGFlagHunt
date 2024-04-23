@@ -55,15 +55,11 @@ class MyScene extends THREE.Scene {
     this.bomba = new Bomba();
     //this.add(this.bomba);
     this.botiquin = new Botiquin();
-    // //this.add(this.botiquin);
+    //this.add(this.botiquin);
     this.bandera = new Bandera();
     //this.add(this.bandera);
-    //this.muro = new MuroCargado();
-   // this.add(this.muro);
-    
-
     this.misil = new Misil();
-    this.add(this.misil);
+    // this.add(this.misil);
     this.estrella = new Estrella();
     //this.add(this.estrella);
   }
@@ -231,6 +227,7 @@ class MyScene extends THREE.Scene {
     this.tanque.update();
     this.bomba.update();
     this.misil.update();
+    this.estrella.update();
     
     // Este método debe ser llamado cada vez que queramos visualizar la escena de nuevo.
     // Literalmente le decimos al navegador: "La próxima vez que haya que refrescar la pantalla, llama al método que te indico".

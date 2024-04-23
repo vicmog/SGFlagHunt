@@ -8,7 +8,7 @@ class Bomba extends THREE.Object3D {
     var bombaCabezaGeometry = new THREE.CylinderGeometry(0.75,0.75,1,30);
     bombaCabezaGeometry.translate(0, 1.5, 0);
     var bombaMechaGeometry = new THREE.CylinderGeometry(0.1,0.1,0.75,30);
-    bombaMechaGeometry.translate(0, 2.5, 0);
+    bombaMechaGeometry.translate(0, 2.25, 0);
 
 
 
