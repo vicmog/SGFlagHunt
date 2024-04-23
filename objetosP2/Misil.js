@@ -25,11 +25,17 @@ class Misil extends THREE.Object3D{
             
             
         ];
+
+        var shapeCohete = new THREE.Shape();
+        shapeCohete.moveTo(0, 0);
+        shapeCohete.quadraticCurveTo(1.8, 3.5, 0, 5);
+        
         
 
-        var cuerpoMisilGeometry = new THREE.LatheGeometry(perfil, 20, 0, 2*Math.PI);
+        var cuerpoMisilGeometry = new THREE.LatheGeometry(shapeCohete.getPoints(), 20, 0, 2*Math.PI);
         cuerpoMisilGeometry.rotateZ(Math.PI);
-        cuerpoMisilGeometry.translate(0, 14, 0);
+        cuerpoMisilGeometry.scale(1.25,1.25,1.25);
+        cuerpoMisilGeometry.translate(0, 7, 0);
 
         var shape = new THREE.Shape();
         shape.moveTo(0, 3);
@@ -49,7 +55,7 @@ class Misil extends THREE.Object3D{
 
         var cuerpoPataMisilGeometry = new THREE.ExtrudeGeometry(shape,extrudeSettings);
         cuerpoPataMisilGeometry.scale(0.5,0.5,0.5);
-        cuerpoPataMisilGeometry.translate(0.9, 0, 0);
+        cuerpoPataMisilGeometry.translate(0.7, 0, 0);
 
         this.cuerpoPataMisil = new THREE.Mesh(cuerpoPataMisilGeometry, material);
     
@@ -71,6 +77,8 @@ class Misil extends THREE.Object3D{
     }
 
     update(){
+
+        this.rotation.y += 0.01;
 
     }
 }

@@ -11,6 +11,7 @@ import { Botiquin } from './Botiquin.js';
 import { Misil } from './Misil.js';
 import { Bandera } from './Bandera.js';
 import { Estrella } from './Estrella.js';
+import { MuroCargado } from './MuroCargado.js';
 
  
 /// La clase fachada del modelo
@@ -57,12 +58,14 @@ class MyScene extends THREE.Scene {
     // //this.add(this.botiquin);
     this.bandera = new Bandera();
     //this.add(this.bandera);
+    //this.muro = new MuroCargado();
+   // this.add(this.muro);
     
 
     this.misil = new Misil();
-    // this.add(this.misil);
+    this.add(this.misil);
     this.estrella = new Estrella();
-    this.add(this.estrella);
+    //this.add(this.estrella);
   }
   
   createCamera () {
@@ -227,6 +230,7 @@ class MyScene extends THREE.Scene {
     // Se actualiza el resto del modelo
     this.tanque.update();
     this.bomba.update();
+    this.misil.update();
     
     // Este método debe ser llamado cada vez que queramos visualizar la escena de nuevo.
     // Literalmente le decimos al navegador: "La próxima vez que haya que refrescar la pantalla, llama al método que te indico".
