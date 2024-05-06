@@ -6,7 +6,7 @@ import * as THREE from '../libs/three.module.js'
 import { GUI } from '../libs/dat.gui.module.js'
 import { TrackballControls } from '../libs/TrackballControls.js'
 import { Tubo } from './tubo.js'
-import { Tanque } from '../misObjetos/Tanque.js'
+import { Tanque } from '../objetosP2/Tanque.js'
 
 
  
@@ -47,6 +47,8 @@ class MyScene extends THREE.Scene {
  
 
     this.tubo = new Tubo();
+    this.tanque = new Tanque(this.tubo.getTubeGeometry());    
+    this.add(this.tanque);
     this.add(this.tubo);
   }
   
@@ -211,6 +213,7 @@ class MyScene extends THREE.Scene {
     
     // Se actualiza el resto del modelo
     this.tubo.update();
+    this.tanque.update();
     
     // Este método debe ser llamado cada vez que queramos visualizar la escena de nuevo.
     // Literalmente le decimos al navegador: "La próxima vez que haya que refrescar la pantalla, llama al método que te indico".

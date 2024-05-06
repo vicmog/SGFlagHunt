@@ -1,6 +1,6 @@
 import * as THREE from 'three';
-import { Tanque } from '../misObjetos/Tanque.js'
-import * as TWEEN from '../libs/tween.esm.js';
+import { Tanque } from '../objetosP2/Tanque.js'
+import { Cubo } from '../primitivas/Cubo.js';
 
 class Tubo extends THREE.Object3D {
     constructor() {
@@ -16,38 +16,18 @@ class Tubo extends THREE.Object3D {
         var torusGeometry = new THREE.TorusKnotGeometry(radius, tube, tubularSegments, radialSegments, p, q);
         
         var path = this.getPathFromTorusKnot(torusGeometry);
-        var tuboGeometry = new THREE.TubeGeometry(path, tubularSegments, 5, radialSegments, true);
-        this.tubo = new THREE.Mesh(tuboGeometry, material);
+        this.spline = path;
 
-
-        this.tanque = new Tanque();
-        this.tanque.scale.set(0.75, 0.75, 0.75);
-        var origen = {p: 0};
-        var destino = {p: 1};
-        var posicion = path.getPointAt(origen.p);
-        this.tanque.position.copy(posicion);
-        // this.tanque.position.y += 5; 
-
-        var tangente = path.getTangentAt(origen.p);
-        posicion.add(tangente);
-        this.tanque.lookAt(posicion);
+        this.tuboGeometry = new THREE.TubeGeometry(path, tubularSegments, 5, radialSegments, true);
+        this.tubo = new THREE.Mesh(this.tuboGeometry, material);
         
-        var movimiento = new TWEEN.Tween(origen).to(destino, 100000)
-        .easing(TWEEN.Easing.Linear.None).onUpdate(() => {
-            posicion = path.getPoint(origen.p);
-            this.tanque.position.copy(posicion);
-            var tangente = path.getTangentAt(origen.p);
-            posicion.add(tangente);
-            this.tanque.lookAt(posicion);
-            this.tanque.rotateY(Math.PI/2);
-            this.tanque.position.y += 6;
-        })
-        .start()
-        .repeat(Infinity)
-    
-        this.add(this.tanque);
         this.add(this.tubo);
+ 
 
+    }
+
+    getTubeGeometry(){
+        return this.tuboGeometry;
     }
 
     getPathFromTorusKnot (torusKnot) {
@@ -79,7 +59,6 @@ class Tubo extends THREE.Object3D {
         return new THREE.CatmullRomCurve3 (points, true);
       }
     update() {
-        TWEEN.update();
     }
 }
 
