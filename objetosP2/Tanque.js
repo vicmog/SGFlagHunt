@@ -98,16 +98,7 @@ class Tanque extends THREE.Object3D{
         this.nodoTranslacionY.add(this.tanque);
         this.nodoTranslacionY.position.y += this.radio + 0.05;
 
-        this.camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 1000);
-        this.nodoTranslacionY.add(this.camera);
-        this.camera.position.set(0, 15,-43);
-
-
-        var puntoDeMiraRelativo = new THREE.Vector3(0,-1,20);
-        var target = new THREE.Vector3(0,0,0);
-        this.camera.getWorldPosition(target);
-        target.add(puntoDeMiraRelativo);
-        this.camera.lookAt(target);
+        this.createCamara();
 
         //NODO ROTACION Z
         this.nodoRotacionZ = new THREE.Object3D();
@@ -143,6 +134,17 @@ class Tanque extends THREE.Object3D{
         .repeat(Infinity)
         .start();
 
+    }
+
+    createCamara(){
+        this.camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 1000);
+        this.nodoTranslacionY.add(this.camera);
+        this.camera.position.set(0, 15,-43);
+        var puntoDeMiraRelativo = new THREE.Vector3(0,-1,20);
+        var target = new THREE.Vector3(0,0,0);
+        this.camera.getWorldPosition(target);
+        target.add(puntoDeMiraRelativo);
+        this.camera.lookAt(target);
     }
 
     getCameraPersonaje () {

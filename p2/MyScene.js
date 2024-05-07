@@ -8,6 +8,8 @@ import { TrackballControls } from '../libs/TrackballControls.js'
 import { Tubo } from './tubo.js'
 import { Tanque } from '../objetosP2/Tanque.js'
 import * as KeyCode from '../libs/keycode.esm.js';
+import { Luna } from '../objetosP2/Luna.js';
+import { Botiquin } from '../objetosP2/Botiquin.js';
 
  
 /// La clase fachada del modelo
@@ -46,7 +48,14 @@ class MyScene extends THREE.Scene {
  
 
     this.tubo = new Tubo();
-    this.tanque = new Tanque(this.tubo.getTubeGeometry());    
+    this.tanque = new Tanque(this.tubo.getTubeGeometry());
+    this.luna = new Luna();
+    // Mover la luna
+    this.luna.position.set(-100, 100, 10);
+
+    this.botiquin = new Botiquin(this.tubo.getTubeGeometry(), 0.5);
+    this.add(this.botiquin);
+    this.add(this.luna);
     this.add(this.tanque);
     this.add(this.tubo);
   }

@@ -2,6 +2,38 @@ import * as THREE from 'three';
 import {CSG} from '../libs/CSG-v2.js';
 
 class Botiquin extends THREE.Object3D{
+    asignarPos(geometriaTubo, t){
+        this.tubo = geometriaTubo;
+        this.path = geometriaTubo.parameters.path;
+        this.radio = geometriaTubo.parameters.radius;
+        this.segmentos = geometriaTubo.parameters.tubularSegments;
+        this.alfa = 0;
+
+        // NODO TRASLACION Y
+        var nodoTraslacionY = new THREE.Object3D();
+        nodoTraslacionY.position.y = 0;
+        nodoTraslacionY.add(this.botiquin);
+        nodoTraslacionY.position.y += this.radio + 0.05;
+
+        // NODO ROTACION Z
+        var nodoRotacionZ = new THREE.Object3D();
+        nodoRotacionZ.add(nodoTraslacionY);
+        nodoRotacionZ.rotateZ(this.alfa);
+
+        // NODO POSICION Y ORIENTACION TUBO
+        var nodoPosOrientTubo = new THREE.Object3D();
+        nodoPosOrientTubo.add(nodoRotacionZ);
+        var posTmp = this.path.getPointAt(t);
+        nodoPosOrientTubo.position.copy(posTmp);
+
+        var tangente = this.path.getTangentAt(t);
+        posTmp.add(tangente);
+        var segmentoActual = Math.floor(t * this.segmentos);
+        nodoPosOrientTubo.up = this.tubo.binormals[segmentoActual];
+        nodoPosOrientTubo.lookAt(posTmp);
+
+        return nodoPosOrientTubo;
+    }
     createCuerpo(material){
         var shape = new THREE.Shape();
         shape.moveTo(0.5,0);
@@ -46,7 +78,7 @@ class Botiquin extends THREE.Object3D{
         var cruz = csg.toMesh(material);
         return cruz;
     }
-    constructor(){
+    constructor(geometriaTubo, t){
         super();
         var material = new THREE.MeshNormalMaterial();
         var colorBlanco = new THREE.Color(1,1,1);
@@ -66,17 +98,21 @@ class Botiquin extends THREE.Object3D{
         this.cruztrasera = this.createCruz(materialCruz);
         this.cruztrasera.position.set(2, 1.5, -0.2);
 
-        // var csg = new CSG();
-        // csg.union([this.cuerpoBotiquin, this.asa, this.cruz, this.cruztrasera]);
-        // this.botiquin = csg.toMesh();
-        // this.add(this.botiquin);  
-        this.add(this.cuerpoBotiquin);
-        this.add(this.asa);
-        this.add(this.cruz);
-        this.add(this.cruztrasera);  
+        // NODO BOTIQUIN
+        this.botiquin = new THREE.Object3D();
+        this.botiquin.add(this.cuerpoBotiquin);
+        this.botiquin.add(this.asa);
+        this.botiquin.add(this.cruz);
+        this.botiquin.add(this.cruztrasera);
+
+        this.botiquin.scale.set(0.5, 0.5, 0.5);
+
+        this.nodoPos = this.asignarPos(geometriaTubo, t);
+        this.add(this.nodoPos);
+        
+
     }
     upadate(){
-        
     }
 }
 
