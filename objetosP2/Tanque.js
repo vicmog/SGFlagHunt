@@ -2,6 +2,7 @@ import * as THREE from 'three';
 import {CSG} from '../libs/CSG-v2.js';
 import { Tubo } from '../p2/tubo.js';
 import * as TWEEN from '../libs/tween.esm.js';
+import * as KeyCode from '../libs/keycode.esm.js';
 
 
 
@@ -9,6 +10,9 @@ class Tanque extends THREE.Object3D{
 
     constructor(geometriaTubo){
         super();
+        // Variables Para el movimiento
+        this.dcha = false;
+        this.izda = false;
 
         this.tubo = geometriaTubo;
         this.path = geometriaTubo.parameters.path;
@@ -101,7 +105,7 @@ class Tanque extends THREE.Object3D{
         this.nodoRotacionZ.rotateZ(this.alfa);
         //NODO POSICION Y ORIENTACION TUBO
         this.nodoPosOrientTubo = new THREE.Object3D();
-        this.nodoPosOrientTubo.add(this.nodoTranslacionY);
+        this.nodoPosOrientTubo.add(this.nodoRotacionZ);
         var posTmp = this.path.getPointAt(origen.t);
         this.nodoPosOrientTubo.position.copy(posTmp);
 
@@ -129,6 +133,15 @@ class Tanque extends THREE.Object3D{
         .repeat(Infinity)
         .start();
 
+    }
+    girarDerecha(){
+        this.alfa += 0.001;
+        this.nodoRotacionZ.rotateZ(this.alfa);
+    }
+
+    girarIzda(){
+        this.alfa += 0.001;
+        this.nodoRotacionZ.rotateZ(-this.alfa);
     }
 
     update(){

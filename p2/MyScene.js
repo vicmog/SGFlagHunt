@@ -7,7 +7,7 @@ import { GUI } from '../libs/dat.gui.module.js'
 import { TrackballControls } from '../libs/TrackballControls.js'
 import { Tubo } from './tubo.js'
 import { Tanque } from '../objetosP2/Tanque.js'
-
+import * as KeyCode from '../libs/keycode.esm.js';
 
  
 /// La clase fachada del modelo
@@ -204,6 +204,22 @@ class MyScene extends THREE.Scene {
     this.renderer.setSize (window.innerWidth, window.innerHeight);
   }
 
+  // Funcion para el movimiento del tanque
+  onKeyDown (event) {
+    var mov = event.key;
+    switch (mov) {
+      case 'ArrowLeft':
+        console.log("Pulsando dcha");
+        this.tanque.girarIzda();
+        break;
+      case 'ArrowRight':
+        console.log("Pulsando izdaa");
+        this.tanque.girarDerecha();
+        break;
+      default:
+        break;
+    }
+  }
   update () {
     // Le decimos al renderizador "visualiza la escena que te indico usando la cámara que te estoy pasando"
     this.renderer.render (this, this.getCamera());
@@ -211,9 +227,18 @@ class MyScene extends THREE.Scene {
     // Se actualiza la posición de la cámara según su controlador
     this.cameraControl.update();
     
+    // Movimiento
+    if(this.tanque.dcha){
+      this.tanque.girarDerecha();
+    }
+    if(this.tanque.izda){
+      this.tanque.girarIzda();
+    }
+
     // Se actualiza el resto del modelo
     this.tubo.update();
     this.tanque.update();
+    
     
     // Este método debe ser llamado cada vez que queramos visualizar la escena de nuevo.
     // Literalmente le decimos al navegador: "La próxima vez que haya que refrescar la pantalla, llama al método que te indico".
@@ -228,6 +253,9 @@ $(function () {
   
   // Se instancia la escena pasándole el  div  que se ha creado en el html para visualizar
   var scene = new MyScene("#WebGL-output");
+
+  // Movimiento del tanque
+  window.addEventListener ("keydown", (event) => scene.onKeyDown(event));
 
   // Se añaden los listener de la aplicación. En este caso, el que va a comprobar cuándo se modifica el tamaño de la ventana de la aplicación.
   window.addEventListener ("resize", () => scene.onWindowResize());
