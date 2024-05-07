@@ -17,6 +17,8 @@ class Tanque extends THREE.Object3D{
         this.t = 0 ;
         this.alfa = 0;
 
+        this.camera = null;
+
 
         var material = new THREE.MeshNormalMaterial();
         var material2 = new THREE.MeshStandardMaterial({color: 0x0000ff});
@@ -83,52 +85,68 @@ class Tanque extends THREE.Object3D{
         this.tanque.add(this.cuerpoRueda4);
         this.tanque.add(this.cuerpoRueda5);
 
-        this.tanque.scale.set(0.5, 0.5, 0.5);
+        this.tanque.scale.set(0.35, 0.35, 0.35);
         this.tanque.rotateY(Math.PI/2);
 
 
-        var origen = {t:0};
-        var destino = {t:1};
+        this.origen = {t:0};
+        this.destino = {t:1};
 
-        
+
         //NODO TRANSLACION Y
         this.nodoTranslacionY = new THREE.Object3D();
         this.nodoTranslacionY.add(this.tanque);
-        this.nodoTranslacionY.position.y += this.radio;
+        this.nodoTranslacionY.position.y += this.radio + 0.1;
+
+        this.camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 1000);
+        this.nodoTranslacionY.add(this.camera);
+        this.camera.position.set(0, 15,-43);
+
+
+        var puntoDeMiraRelativo = new THREE.Vector3(0,-1,20);
+        var target = new THREE.Vector3(0,0,0);
+        this.camera.getWorldPosition(target);
+        target.add(puntoDeMiraRelativo);
+        this.camera.lookAt(target);
+
         //NODO ROTACION Z
         this.nodoRotacionZ = new THREE.Object3D();
         this.nodoRotacionZ.add(this.nodoTranslacionY);
         this.nodoRotacionZ.rotateZ(this.alfa);
         //NODO POSICION Y ORIENTACION TUBO
         this.nodoPosOrientTubo = new THREE.Object3D();
-        this.nodoPosOrientTubo.add(this.nodoTranslacionY);
-        var posTmp = this.path.getPointAt(origen.t);
+        this.nodoPosOrientTubo.add(this.nodoRotacionZ);
+        var posTmp = this.path.getPointAt(this.origen.t);
         this.nodoPosOrientTubo.position.copy(posTmp);
 
 
-        var tangente = this.path.getTangentAt(origen.t);
+        var tangente = this.path.getTangentAt(this.origen.t);
         posTmp.add(tangente);
-        var segmentoActual = Math.floor(origen.t * this.segmentos);
+        var segmentoActual = Math.floor(this.origen.t * this.segmentos);
         this.nodoPosOrientTubo.up = this.tubo.binormals[segmentoActual];
         this.nodoPosOrientTubo.lookAt(posTmp);
 
         this.add(this.nodoPosOrientTubo);
 
         var tiempo = 50000;
-        var animacion = new TWEEN.Tween(origen).to(destino, tiempo)
+        var animacion = new TWEEN.Tween(this.origen).to(this.destino, tiempo)
         .onUpdate(() => {
-            var posicion = this.path.getPointAt(origen.t);
+            var posicion = this.path.getPointAt(this.origen.t);
             this.nodoPosOrientTubo.position.copy(posicion);
-            var tangente = this.path.getTangentAt(origen.t);
+            var tangente = this.path.getTangentAt(this.origen.t);
             posicion.add(tangente);
 
-            var segmentoActual = Math.floor(origen.t * this.segmentos);
+            var segmentoActual = Math.floor(this.origen.t * this.segmentos);
             this.nodoPosOrientTubo.up = this.tubo.binormals[segmentoActual];
             this.nodoPosOrientTubo.lookAt(posicion);
         })
         .repeat(Infinity)
         .start();
 
+    }
+
+    getCameraPersonaje () {
+        return this.camera;
     }
 
     update(){
