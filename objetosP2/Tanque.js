@@ -96,7 +96,7 @@ class Tanque extends THREE.Object3D{
         //NODO TRANSLACION Y
         this.nodoTranslacionY = new THREE.Object3D();
         this.nodoTranslacionY.add(this.tanque);
-        this.nodoTranslacionY.position.y += this.radio + 0.1;
+        this.nodoTranslacionY.position.y += this.radio + 0.05;
 
         this.camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 1000);
         this.nodoTranslacionY.add(this.camera);
