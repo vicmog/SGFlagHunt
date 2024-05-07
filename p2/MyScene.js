@@ -26,6 +26,7 @@ class MyScene extends THREE.Scene {
     
     // Se crea la interfaz gráfica de usuario
     this.gui = this.createGUI ();
+    this.camaraPrincipal = true;
     
     // Construimos los distinos elementos que tendremos en la escena
     
@@ -57,11 +58,13 @@ class MyScene extends THREE.Scene {
     //   Los planos de recorte cercano y lejano
     this.camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 1000);
     // También se indica dónde se coloca
-    this.camera.position.set (20, 10, 20);
+    this.camera.position.set (0, 10, 300);
     // Y hacia dónde mira
     var look = new THREE.Vector3 (0,0,0);
     this.camera.lookAt(look);
     this.add (this.camera);
+
+    this.camara = this.camera;
     
     // Para el control de cámara usamos una clase que ya tiene implementado los movimientos de órbita
     this.cameraControl = new TrackballControls (this.camera, this.renderer.domElement);
@@ -162,7 +165,7 @@ class MyScene extends THREE.Scene {
     // En principio se devuelve la única cámara que tenemos
     // Si hubiera varias cámaras, este método decidiría qué cámara devuelve cada vez que es consultado
     //return this.camera;
-    return this.tanque.getCameraPersonaje();
+    return this.camara;
   }
   
   setCameraAspect (ratio) {
@@ -187,13 +190,20 @@ class MyScene extends THREE.Scene {
     var mov = event.key;
     switch (mov) {
       case 'ArrowLeft':
-        console.log("Pulsando dcha");
         this.tanque.girarIzda();
         break;
       case 'ArrowRight':
-        console.log("Pulsando izdaa");
         this.tanque.girarDerecha();
         break;
+      case ' ':
+        if(!this.camaraPrincipal){
+          this.camara = this.camera;
+          this.camaraPrincipal = true;
+        }else{
+          this.camara = this.tanque.getCameraPersonaje();
+          this.camaraPrincipal = false;
+        }
+
       default:
         break;
     }

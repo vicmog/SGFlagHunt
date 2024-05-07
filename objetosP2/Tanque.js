@@ -149,6 +149,16 @@ class Tanque extends THREE.Object3D{
         return this.camera;
     }
 
+    girarDerecha(){
+        this.alfa += 0.001;
+        this.nodoRotacionZ.rotateZ(this.alfa);
+    }
+
+    girarIzda(){
+        this.alfa += 0.001;
+        this.nodoRotacionZ.rotateZ(-this.alfa);
+    }
+
     update(){
        TWEEN.update();
     }
