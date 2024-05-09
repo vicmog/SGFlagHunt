@@ -54,6 +54,15 @@ class MyScene extends THREE.Scene {
     this.luna.position.set(-100, 100, 10);
 
     this.botiquin = new Botiquin(this.tubo.getTubeGeometry(), 0.5);
+
+
+    // PICKING
+    this.raton = new THREE.Vector2();
+    this.raycasterRaton = new THREE.Raycaster();
+
+    // RAYO PARA COLISIONES
+    this.rayo = new THREE.Raycaster(new THREE.Vector3(), new THREE.Vector3(0,0,1), 0, 1000);
+    
     this.add(this.botiquin);
     this.add(this.luna);
     this.add(this.tanque);
@@ -193,7 +202,39 @@ class MyScene extends THREE.Scene {
     // Y también el tamaño del renderizador
     this.renderer.setSize (window.innerWidth, window.innerHeight);
   }
+  // Funcion para colisiones
+  colisiones(){
+    // Obtenemos la posicion del tanque y la asignamos en la variable posicion
+    var posicion  = new THREE.Vector3();
+    this.tanque.getWorldPosition(posicion);
+    // Obtenemos la direccion del tanque y la asignamos en la variable direccion
+    var direccion = new THREE.Vector3(0,0,1);
+    this.tanque.nodoPosOrientTubo.getWorldDirection(direccion);
+    this.rayo.set(posicion, direccion.normalize());
+    
+    var candidatos = [this.botiquin];
 
+    var impactados = this.rayo.intersectObjects(candidatos, true);
+    if(impactados.length > 0){
+      console.log("Colision Con Botiquin");
+    }
+  }
+  // Funcion para el picking
+  onDocumentMouseDown(event){
+    this.raton.x = (event.clientX / window.innerWidth) * 2 - 1;
+    this.raton.y = 1 - 2 * (event.clientY / window.innerHeight);
+    this.raycasterRaton.setFromCamera(this.raton, this.getCamera());
+    var pickableObjects = [this.luna];
+    
+    var pickedObjects = this.raycasterRaton.intersectObjects(pickableObjects, true);
+
+    if (pickedObjects.length > 0) { 
+        var objeto = pickedObjects[0].object;
+        var selectedPoint = pickedObjects[0].point;
+        console.log(objeto);
+        console.log(selectedPoint);
+    }
+  }
   // Funcion para el movimiento del tanque
   onKeyDown (event) {
     var mov = event.key;
@@ -236,7 +277,9 @@ class MyScene extends THREE.Scene {
     this.tubo.update();
     this.tanque.update();
     
-    
+     // Colisiones
+     this.colisiones();
+
     // Este método debe ser llamado cada vez que queramos visualizar la escena de nuevo.
     // Literalmente le decimos al navegador: "La próxima vez que haya que refrescar la pantalla, llama al método que te indico".
     // Si no existiera esta línea,  update()  se ejecutaría solo la primera vez.
@@ -253,6 +296,10 @@ $(function () {
 
   // Movimiento del tanque
   window.addEventListener ("keydown", (event) => scene.onKeyDown(event));
+
+  // Raton
+  window.addEventListener ("click", (event) => scene.onDocumentMouseDown(event));
+
 
   // Se añaden los listener de la aplicación. En este caso, el que va a comprobar cuándo se modifica el tamaño de la ventana de la aplicación.
   window.addEventListener ("resize", () => scene.onWindowResize());
