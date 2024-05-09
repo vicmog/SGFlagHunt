@@ -139,7 +139,7 @@ class Tanque extends THREE.Object3D{
     createCamara(){
         this.camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 1000);
         this.nodoTranslacionY.add(this.camera);
-        this.camera.position.set(0, 15,-43);
+        this.camera.position.set(0, 7,-20);
         var puntoDeMiraRelativo = new THREE.Vector3(0,-1,20);
         var target = new THREE.Vector3(0,0,0);
         this.camera.getWorldPosition(target);
