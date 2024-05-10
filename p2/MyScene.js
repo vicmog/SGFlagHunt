@@ -53,17 +53,27 @@ class MyScene extends THREE.Scene {
     // Mover la luna
     this.luna.position.set(-100, 100, 10);
 
-    this.botiquin = new Botiquin(this.tubo.getTubeGeometry(), 0.5);
+    this.botiquin = new Botiquin(this.tubo.getTubeGeometry(), 0.1);
+    this.botiquin2 = new Botiquin(this.tubo.getTubeGeometry(), 0.2);
+    this.botiquin3 = new Botiquin(this.tubo.getTubeGeometry(), 0.5);
+    this.botiquin4 = new Botiquin(this.tubo.getTubeGeometry(), 0.7);    
+    this.botiquin5 = new Botiquin(this.tubo.getTubeGeometry(), 0.9);
+
+
+
+    this.createRayos();
 
 
     // PICKING
     this.raton = new THREE.Vector2();
     this.raycasterRaton = new THREE.Raycaster();
-
-    // RAYO PARA COLISIONES
-    this.rayo = new THREE.Raycaster(new THREE.Vector3(), new THREE.Vector3(0,0,1), 0, 1000);
     
     this.add(this.botiquin);
+    this.add(this.botiquin2);
+    this.add(this.botiquin3);
+    this.add(this.botiquin4);
+    this.add(this.botiquin5);
+
     this.add(this.luna);
     this.add(this.tanque);
     this.add(this.tubo);
@@ -203,22 +213,205 @@ class MyScene extends THREE.Scene {
     this.renderer.setSize (window.innerWidth, window.innerHeight);
   }
   // Funcion para colisiones
-  colisiones(){
-    // Obtenemos la posicion del tanque y la asignamos en la variable posicion
-    var posicion  = new THREE.Vector3();
-    this.tanque.getWorldPosition(posicion);
-    // Obtenemos la direccion del tanque y la asignamos en la variable direccion
-    var direccion = new THREE.Vector3(0,0,1);
-    this.tanque.nodoPosOrientTubo.getWorldDirection(direccion);
-    this.rayo.set(posicion, direccion.normalize());
-    
-    var candidatos = [this.botiquin];
+  createRayos(){
 
-    var impactados = this.rayo.intersectObjects(candidatos, true);
+    this.rayo = new THREE.Raycaster(new THREE.Vector3(), new THREE.Vector3(0,0,0), 0, 10);
+    this.rayo2 = new THREE.Raycaster(new THREE.Vector3(), new THREE.Vector3(0,0,0), 0, 10);
+    this.rayo3 = new THREE.Raycaster(new THREE.Vector3(), new THREE.Vector3(0,0,0), 0, 10);
+    this.rayo4 = new THREE.Raycaster(new THREE.Vector3(), new THREE.Vector3(0,0,0), 0, 10);
+    this.rayo5 = new THREE.Raycaster(new THREE.Vector3(), new THREE.Vector3(0,0,0), 0, 10);
+    this.rayo6 = new THREE.Raycaster(new THREE.Vector3(), new THREE.Vector3(0,0,0), 0, 10);
+    this.rayo7 = new THREE.Raycaster(new THREE.Vector3(), new THREE.Vector3(0,0,0), 0, 10);
+
+    var posicion  = new THREE.Vector3();
+    this.tanque.nodoTranslacionY.getWorldPosition(posicion);
+
+    var direccion = new THREE.Vector3(0,0,0);
+    this.tanque.nodoPosOrientTubo.getWorldDirection(direccion);
+
+
+    var posicionPrimerRayo = posicion.clone();
+    posicionPrimerRayo.y -= 1;
+    this.rayo.set(posicionPrimerRayo, direccion);
+
+
+    var posicionSegundoRayo = posicion.clone();
+    posicionSegundoRayo.y -= 2;
+    posicionSegundoRayo.x += 1;
+    this.rayo2.set(posicionSegundoRayo, direccion);
+
+
+    var posicionTercerRayo = posicion.clone();
+    posicionTercerRayo.y -= 2;
+    posicionTercerRayo.x -= 1;
+    this.rayo3.set(posicionTercerRayo, direccion);
+
+
+    var posicionCuartoRayo = posicion.clone();
+    posicionCuartoRayo.y += 0.2;
+    posicionCuartoRayo.x += 1;
+    this.rayo4.set(posicionCuartoRayo, direccion);
+
+
+    var posicionQuintoRayo = posicion.clone();
+    posicionQuintoRayo.y += 0.1;
+    posicionQuintoRayo.x -= 1;
+    this.rayo5.set(posicionQuintoRayo, direccion);
+
+
+    var posicionSextoRayo = posicion.clone();
+    posicionSextoRayo.y += 0.1;
+    this.rayo6.set(posicionSextoRayo, direccion);
+
+
+    var posicionSeptimoRayo = posicion.clone();
+    posicionSeptimoRayo.y -= 2;
+    this.rayo7.set(posicionSeptimoRayo, direccion);
+
+
+    
+    this.candidatos = [this.botiquin, this.botiquin2, this.botiquin3, this.botiquin4, this.botiquin5];
+
+    var impactados = this.rayo.intersectObjects(this.candidatos, true);
+    var impactados2 = this.rayo2.intersectObjects(this.candidatos, true);
+    var impactados3 = this.rayo3.intersectObjects(this.candidatos, true);
+    var impactados4 = this.rayo4.intersectObjects(this.candidatos, true);
+    var impactados5 = this.rayo5.intersectObjects(this.candidatos, true);
+    var impactados6 = this.rayo6.intersectObjects(this.candidatos, true);
+    var impactados7 = this.rayo7.intersectObjects(this.candidatos, true);
+
     if(impactados.length > 0){
-      console.log("Colision Con Botiquin");
+      console.log("Colision");
+      this.remove(impactados[0].object);
     }
+
+    if(impactados2.length > 0){
+      console.log("Colision");
+      this.remove(impactados2[0].object);
+    }
+
+    if(impactados3.length > 0){
+      console.log("Colision");
+      this.remove(impactados3[0].object);
+    }
+
+    if(impactados4.length > 0){
+      console.log("Colision");
+      this.remove(impactados4[0].object);
+    }
+
+    if(impactados5.length > 0){
+      console.log("Colision");
+      this.remove(impactados5[0].object);
+    }
+
+    if(impactados6.length > 0){
+      console.log("Colision");
+      this.remove(impactados6[0].object);
+    }
+
+    if(impactados7.length > 0){
+      console.log("Colision");
+      this.remove(impactados7[0].object);
+    }
+
+    
   }
+
+  updateRayos() {
+    var posicion  = new THREE.Vector3();
+    this.tanque.nodoTranslacionY.getWorldPosition(posicion);
+
+    var direccion = new THREE.Vector3(0,0,0);
+    this.tanque.nodoPosOrientTubo.getWorldDirection(direccion);
+
+    var posicionPrimerRayo = posicion.clone();
+    posicionPrimerRayo.y -= 1;
+    this.rayo.set(posicionPrimerRayo, direccion);
+
+
+    var posicionSegundoRayo = posicion.clone();
+    posicionSegundoRayo.y -= 2;
+    posicionSegundoRayo.x += 1;
+    this.rayo2.set(posicionSegundoRayo, direccion);
+
+
+    var posicionTercerRayo = posicion.clone();
+    posicionTercerRayo.y -= 2;
+    posicionTercerRayo.x -= 1;
+    this.rayo3.set(posicionTercerRayo, direccion);
+ 
+
+    var posicionCuartoRayo = posicion.clone();
+    posicionCuartoRayo.y += 0.2;
+    posicionCuartoRayo.x += 1;
+    this.rayo4.set(posicionCuartoRayo, direccion);
+
+
+    var posicionQuintoRayo = posicion.clone();
+    posicionQuintoRayo.y += 0.1;
+    posicionQuintoRayo.x -= 1;
+    this.rayo5.set(posicionQuintoRayo, direccion);
+
+
+    var posicionSextoRayo = posicion.clone();
+    posicionSextoRayo.y += 0.1;
+    this.rayo6.set(posicionSextoRayo, direccion);
+
+
+    var posicionSeptimoRayo = posicion.clone();
+    posicionSeptimoRayo.y -= 2;
+    this.rayo7.set(posicionSeptimoRayo, direccion);
+
+    var impactados = this.rayo.intersectObjects(this.candidatos, true);
+    var impactados2 = this.rayo2.intersectObjects(this.candidatos, true);
+    var impactados3 = this.rayo3.intersectObjects(this.candidatos, true);
+    var impactados4 = this.rayo4.intersectObjects(this.candidatos, true);
+    var impactados5 = this.rayo5.intersectObjects(this.candidatos, true);
+    var impactados6 = this.rayo6.intersectObjects(this.candidatos, true);
+    var impactados7 = this.rayo7.intersectObjects(this.candidatos, true);
+
+    if(impactados.length > 0){
+      console.log("Colision");
+      this.remove(impactados[0].object);
+    }
+
+    if(impactados2.length > 0){
+      console.log("Colision");
+
+      this.remove(impactados2[0].object);
+    }
+
+    if(impactados3.length > 0){
+      console.log("Colision");
+      this.remove(impactados3[0].object);
+    }
+
+    if(impactados4.length > 0){
+      console.log("Colision");
+      this.remove(impactados4[0].object);
+    }
+
+    if(impactados5.length > 0){
+      console.log("Colision");
+
+      this.remove(impactados5[0].object);
+    }
+
+    if(impactados6.length > 0){
+      console.log("Colision");
+      this.remove(impactados6[0].object);
+    }
+
+    if(impactados7.length > 0){
+      console.log("Colision");
+      this.remove(impactados7[0].object);
+    }
+
+
+}
+
+
   // Funcion para el picking
   onDocumentMouseDown(event){
     this.raton.x = (event.clientX / window.innerWidth) * 2 - 1;
@@ -272,13 +465,13 @@ class MyScene extends THREE.Scene {
     if(this.tanque.izda){
       this.tanque.girarIzda();
     }
-
+    this.updateRayos();
     // Se actualiza el resto del modelo
     this.tubo.update();
     this.tanque.update();
     
      // Colisiones
-     this.colisiones();
+     //this.createRayos();
 
     // Este método debe ser llamado cada vez que queramos visualizar la escena de nuevo.
     // Literalmente le decimos al navegador: "La próxima vez que haya que refrescar la pantalla, llama al método que te indico".
