@@ -1,30 +1,26 @@
 import * as THREE from 'three';
+import * as TWEEN from '../libs/tween.esm.js';
+
 
 class Misil extends THREE.Object3D{
-    constructor() {
+    constructor(geometriaTubo,t,alfa) {
         super();
+
+        this.tubo = geometriaTubo;
+        this.path = geometriaTubo.parameters.path;
+        this.radio = geometriaTubo.parameters.radius;
+        this.segmentos = geometriaTubo.parameters.tubularSegments;
+        this.t = t;
+        this.alfa = alfa;
+
+
+        this.origen = {t:1};
+        this.destino = {t:0};
+
+
+        this.rotacionMisilSpeed = 0.01;
+        
         var material = new THREE.MeshNormalMaterial();
-        var perfil = [
-            new THREE.Vector2(0.01, 4.15),
-            new THREE.Vector2(0.1, 4.2),
-            new THREE.Vector2(0.25, 4.8),
-            new THREE.Vector2(0.45, 5.2),
-            new THREE.Vector2(0.5, 5.5),
-            new THREE.Vector2(0.65, 6.2),
-            new THREE.Vector2(0.85, 7),
-            new THREE.Vector2(0.9, 7.9),
-            new THREE.Vector2(1, 8.5),
-            new THREE.Vector2(1, 9),
-            new THREE.Vector2(1.1, 10),
-            new THREE.Vector2(1.1, 11),
-            new THREE.Vector2(1.1, 11.75),
-            new THREE.Vector2(1.1, 11.5),
-            new THREE.Vector2(1, 13.1),
-            new THREE.Vector2(0.5, 13),
-            new THREE.Vector2(0.0001, 13)
-            
-            
-        ];
 
         var shapeCohete = new THREE.Shape();
         shapeCohete.moveTo(0, 0);
@@ -69,17 +65,62 @@ class Misil extends THREE.Object3D{
         this.pata4 = this.cuerpoPataMisil.clone();
         this.pata4.rotation.y = -Math.PI/2;
         
-        this.add(this.cuerpoMisil);
-        this.add(this.cuerpoPataMisil);
-        this.add(this.pata2);
-        this.add(this.pata3);
-        this.add(this.pata4);
+        this.misil= new THREE.Object3D();
+        this.misil.add(this.cuerpoMisil);
+        this.misil.add(this.cuerpoPataMisil);
+        this.misil.add(this.pata2);
+        this.misil.add(this.pata3);
+        this.misil.add(this.pata4);
+
+        this.misil.scale.set(0.5,0.5,0.5);
+        this.misil.rotateX(-Math.PI/2);
+
+        //NODO TRANSLACION Y
+        this.nodoTranslacionY = new THREE.Object3D();
+        this.nodoTranslacionY.add(this.misil);
+        this.nodoTranslacionY.position.y += this.radio*2.5;
+
+         //NODO ROTACION Z
+         this.nodoRotacionZ = new THREE.Object3D();
+         this.nodoRotacionZ.add(this.nodoTranslacionY);
+         this.nodoRotacionZ.rotateZ(this.alfa);
+
+        //NODO POSICION Y ORIENTACION TUBO
+        this.nodoPosOrientTubo = new THREE.Object3D();
+        this.nodoPosOrientTubo.add(this.nodoRotacionZ);
+        var posTmp = this.path.getPointAt(this.origen.t);
+        this.nodoPosOrientTubo.position.copy(posTmp);
+
+
+        var tangente = this.path.getTangentAt(this.origen.t);
+        posTmp.add(tangente);
+        var segmentoActual = Math.floor(this.origen.t * this.segmentos);
+        this.nodoPosOrientTubo.up = this.tubo.binormals[segmentoActual];
+        this.nodoPosOrientTubo.lookAt(posTmp);
+
+        this.add(this.nodoPosOrientTubo);
+
+        var tiempo = 50000;
+        var animacion = new TWEEN.Tween(this.origen).to(this.destino, tiempo)
+        .onUpdate(() => {
+            var posicion = this.path.getPointAt(this.origen.t);
+            this.nodoPosOrientTubo.position.copy(posicion);
+            var tangente = this.path.getTangentAt(this.origen.t);
+            posicion.add(tangente);
+
+            var segmentoActual = Math.floor(this.origen.t * this.segmentos);
+            this.nodoPosOrientTubo.up = this.tubo.binormals[segmentoActual];
+            this.nodoPosOrientTubo.lookAt(posicion);
+
+            this.misil.rotation.y += this.rotacionMisilSpeed;
+        })
+        .repeat(Infinity)
+        .start();
+
     }
 
     update(){
-
-        this.rotation.y += 0.01;
-
+        TWEEN.update();
     }
 }
 

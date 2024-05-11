@@ -10,6 +10,7 @@ import { Tanque } from '../objetosP2/Tanque.js'
 import * as KeyCode from '../libs/keycode.esm.js';
 import { Luna } from '../objetosP2/Luna.js';
 import { Botiquin } from '../objetosP2/Botiquin.js';
+import { Misil } from '../objetosP2/Misil.js';
 
  
 /// La clase fachada del modelo
@@ -50,6 +51,9 @@ class MyScene extends THREE.Scene {
     this.tubo = new Tubo();
     this.tanque = new Tanque(this.tubo.getTubeGeometry());
     this.luna = new Luna();
+    this.misil = new Misil(this.tubo.getTubeGeometry(),0,0);
+    this.misil2 = new Misil(this.tubo.getTubeGeometry(),0.5,200);
+    this.misil3 = new Misil(this.tubo.getTubeGeometry(),0.7,100);
     // Mover la luna
     this.luna.position.set(-100, 100, 10);
 
@@ -74,6 +78,9 @@ class MyScene extends THREE.Scene {
     this.add(this.botiquin4);
     this.add(this.botiquin5);
 
+    this.add(this.misil);
+    this.add(this.misil2);
+    this.add(this.misil3);
     this.add(this.luna);
     this.add(this.tanque);
     this.add(this.tubo);

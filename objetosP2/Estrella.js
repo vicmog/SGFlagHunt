@@ -28,12 +28,17 @@ class Estrella extends THREE.Object3D{
         this.estrella = new THREE.Mesh(estrellaGeometria, material);
         return this.estrella;
     }
-    constructor(){
+    constructor(geometriaTubo){
         super();
         var material = new THREE.MeshNormalMaterial();
-        this.estrella = this.createEstrella(material);
+        var estrella = this.createEstrella(material);
+        
+        //Nodo estrella
+        this.estrella = new THREE.Object3D();
+        this.estrella.add(estrella);
         this.add(this.estrella);
     }
+
     update(){
         this.estrella.rotation.y += 0.01;
     }
