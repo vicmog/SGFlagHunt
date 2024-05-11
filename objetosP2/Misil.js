@@ -100,7 +100,7 @@ class Misil extends THREE.Object3D{
 
         this.add(this.nodoPosOrientTubo);
 
-        var tiempo = 50000;
+        var tiempo = 100000;
         var animacion = new TWEEN.Tween(this.origen).to(this.destino, tiempo)
         .onUpdate(() => {
             var posicion = this.path.getPointAt(this.origen.t);

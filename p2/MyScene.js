@@ -424,7 +424,7 @@ class MyScene extends THREE.Scene {
     this.raton.x = (event.clientX / window.innerWidth) * 2 - 1;
     this.raton.y = 1 - 2 * (event.clientY / window.innerHeight);
     this.raycasterRaton.setFromCamera(this.raton, this.getCamera());
-    var pickableObjects = [this.luna];
+    var pickableObjects = [this.luna,this.misil,this.misil2,this.misil3];
     
     var pickedObjects = this.raycasterRaton.intersectObjects(pickableObjects, true);
 
