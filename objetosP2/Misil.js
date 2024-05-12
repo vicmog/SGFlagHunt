@@ -100,19 +100,23 @@ class Misil extends THREE.Object3D{
 
         this.add(this.nodoPosOrientTubo);
 
-        var tiempo = 100000;
+        var tiempo = 70000;
         var animacion = new TWEEN.Tween(this.origen).to(this.destino, tiempo)
         .onUpdate(() => {
             var posicion = this.path.getPointAt(this.origen.t);
             this.nodoPosOrientTubo.position.copy(posicion);
             var tangente = this.path.getTangentAt(this.origen.t);
             posicion.add(tangente);
-
+            if(this.origen.t == 0){
+                console.log("Misil visible");
+                this.misil.visible = true;
+            }
             var segmentoActual = Math.floor(this.origen.t * this.segmentos);
             this.nodoPosOrientTubo.up = this.tubo.binormals[segmentoActual];
             this.nodoPosOrientTubo.lookAt(posicion);
 
             this.misil.rotation.y += this.rotacionMisilSpeed;
+
         })
         .repeat(Infinity)
         .start();

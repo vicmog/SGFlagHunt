@@ -106,6 +106,7 @@ class Botiquin extends THREE.Object3D{
         this.botiquin.add(this.cruztrasera);
 
         this.botiquin.scale.set(0.5, 0.5, 0.5);
+        this.botiquin.userData = "botiquin";
 
         this.nodoPos = this.asignarPos(geometriaTubo, t);
         this.add(this.nodoPos);

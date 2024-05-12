@@ -221,14 +221,14 @@ class MyScene extends THREE.Scene {
   }
   // Funcion para colisiones
   createRayos(){
-
-    this.rayo = new THREE.Raycaster(new THREE.Vector3(), new THREE.Vector3(0,0,0), 0, 10);
-    this.rayo2 = new THREE.Raycaster(new THREE.Vector3(), new THREE.Vector3(0,0,0), 0, 10);
-    this.rayo3 = new THREE.Raycaster(new THREE.Vector3(), new THREE.Vector3(0,0,0), 0, 10);
-    this.rayo4 = new THREE.Raycaster(new THREE.Vector3(), new THREE.Vector3(0,0,0), 0, 10);
-    this.rayo5 = new THREE.Raycaster(new THREE.Vector3(), new THREE.Vector3(0,0,0), 0, 10);
-    this.rayo6 = new THREE.Raycaster(new THREE.Vector3(), new THREE.Vector3(0,0,0), 0, 10);
-    this.rayo7 = new THREE.Raycaster(new THREE.Vector3(), new THREE.Vector3(0,0,0), 0, 10);
+    var distancia = 5;
+    this.rayo = new THREE.Raycaster(new THREE.Vector3(), new THREE.Vector3(0,0,0), 0, distancia);
+    this.rayo2 = new THREE.Raycaster(new THREE.Vector3(), new THREE.Vector3(0,0,0), 0, distancia);
+    this.rayo3 = new THREE.Raycaster(new THREE.Vector3(), new THREE.Vector3(0,0,0), 0, distancia);
+    this.rayo4 = new THREE.Raycaster(new THREE.Vector3(), new THREE.Vector3(0,0,0), 0, distancia);
+    this.rayo5 = new THREE.Raycaster(new THREE.Vector3(), new THREE.Vector3(0,0,0), 0, distancia);
+    this.rayo6 = new THREE.Raycaster(new THREE.Vector3(), new THREE.Vector3(0,0,0), 0, distancia);
+    this.rayo7 = new THREE.Raycaster(new THREE.Vector3(), new THREE.Vector3(0,0,0), 0, distancia);
 
     var posicion  = new THREE.Vector3();
     this.tanque.nodoTranslacionY.getWorldPosition(posicion);
@@ -288,38 +288,40 @@ class MyScene extends THREE.Scene {
     var impactados7 = this.rayo7.intersectObjects(this.candidatos, true);
 
     if(impactados.length > 0){
-      console.log("Colision");
-      this.remove(impactados[0].object);
+      var obj = impactados[0].object;
+      obj.parent.visible = false;
     }
 
     if(impactados2.length > 0){
-      console.log("Colision");
-      this.remove(impactados2[0].object);
+      var obj = impactados2[0].object;
+      obj.parent.visible = false;
     }
 
     if(impactados3.length > 0){
-      console.log("Colision");
-      this.remove(impactados3[0].object);
+      var obj = impactados3[0].object;
+      obj.parent.visible = false;
+      
     }
 
     if(impactados4.length > 0){
-      console.log("Colision");
-      this.remove(impactados4[0].object);
+      var obj = impactados4[0].object;
+      obj.parent.visible = false;
     }
 
     if(impactados5.length > 0){
-      console.log("Colision");
-      this.remove(impactados5[0].object);
+      var obj = impactados5[0].object;
+      obj.parent.visible = false;
+      
     }
 
     if(impactados6.length > 0){
-      console.log("Colision");
-      this.remove(impactados6[0].object);
+      var obj = impactados6[0].object;
+      obj.parent.visible = false;
     }
 
     if(impactados7.length > 0){
-      console.log("Colision");
-      this.remove(impactados7[0].object);
+      var obj = impactados7[0].object;
+      obj.parent.visible = false;
     }
 
     
@@ -379,43 +381,39 @@ class MyScene extends THREE.Scene {
     var impactados7 = this.rayo7.intersectObjects(this.candidatos, true);
 
     if(impactados.length > 0){
-      console.log("Colision");
-      this.remove(impactados[0].object);
+      var obj = impactados[0].object;
+      obj.parent.visible = false;
     }
 
     if(impactados2.length > 0){
-      console.log("Colision");
-
-      this.remove(impactados2[0].object);
+      var obj = impactados2[0].object;
+      obj.parent.visible = false;
     }
 
     if(impactados3.length > 0){
-      console.log("Colision");
-      this.remove(impactados3[0].object);
-    }
+      var obj = impactados3[0].object;
+      obj.parent.visible = false;
+      }
 
     if(impactados4.length > 0){
-      console.log("Colision");
-      this.remove(impactados4[0].object);
+      var obj = impactados4[0].object;
+      obj.parent.visible = false;
     }
 
     if(impactados5.length > 0){
-      console.log("Colision");
-
-      this.remove(impactados5[0].object);
+      var obj = impactados5[0].object;
+      obj.parent.visible = false;
     }
 
     if(impactados6.length > 0){
-      console.log("Colision");
-      this.remove(impactados6[0].object);
+      var obj = impactados6[0].object;
+      obj.parent.visible = false;
     }
 
     if(impactados7.length > 0){
-      console.log("Colision");
-      this.remove(impactados7[0].object);
+      var obj = impactados7[0].object;
+      obj.parent.visible = false;
     }
-
-
 }
 
 
@@ -431,6 +429,7 @@ class MyScene extends THREE.Scene {
     if (pickedObjects.length > 0) { 
         var objeto = pickedObjects[0].object;
         var selectedPoint = pickedObjects[0].point;
+        objeto.parent.visible = false;
         console.log(objeto);
         console.log(selectedPoint);
     }
