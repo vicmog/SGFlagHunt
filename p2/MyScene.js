@@ -11,6 +11,7 @@ import * as KeyCode from '../libs/keycode.esm.js';
 import { Luna } from '../objetosP2/Luna.js';
 import { Botiquin } from '../objetosP2/Botiquin.js';
 import { Misil } from '../objetosP2/Misil.js';
+import { Estrella } from '../objetosP2/Estrella.js'
 
  
 /// La clase fachada del modelo
@@ -43,8 +44,8 @@ class MyScene extends THREE.Scene {
     
     // Y unos ejes. Imprescindibles para orientarnos sobre dónde están las cosas
     // Todas las unidades están en metros
-    this.axis = new THREE.AxesHelper (10);
-    this.add (this.axis);
+    /*this.axis = new THREE.AxesHelper (10);
+    this.add (this.axis);*/
 
  
 
@@ -63,6 +64,12 @@ class MyScene extends THREE.Scene {
     this.botiquin4 = new Botiquin(this.tubo.getTubeGeometry(), 0.7);    
     this.botiquin5 = new Botiquin(this.tubo.getTubeGeometry(), 0.9);
 
+    this.estrella = new Estrella(this.tubo.getTubeGeometry(), 0.3);
+    this.estrella2 = new Estrella(this.tubo.getTubeGeometry(), 0.6);
+    this.estrella3 = new Estrella(this.tubo.getTubeGeometry(), 0.8);
+
+
+
 
 
     this.createRayos();
@@ -78,9 +85,15 @@ class MyScene extends THREE.Scene {
     this.add(this.botiquin4);
     this.add(this.botiquin5);
 
+    this.add(this.estrella);
+    this.add(this.estrella2);
+    this.add(this.estrella3);
+
+
     this.add(this.misil);
     this.add(this.misil2);
     this.add(this.misil3);
+
     this.add(this.luna);
     this.add(this.tanque);
     this.add(this.tubo);
@@ -277,7 +290,7 @@ class MyScene extends THREE.Scene {
 
 
     
-    this.candidatos = [this.botiquin, this.botiquin2, this.botiquin3, this.botiquin4, this.botiquin5];
+    this.candidatos = [this.botiquin, this.botiquin2, this.botiquin3, this.botiquin4, this.botiquin5, this.estrella, this.estrella2, this.estrella3];
 
     var impactados = this.rayo.intersectObjects(this.candidatos, true);
     var impactados2 = this.rayo2.intersectObjects(this.candidatos, true);
@@ -289,39 +302,93 @@ class MyScene extends THREE.Scene {
 
     if(impactados.length > 0){
       var obj = impactados[0].object;
-      obj.parent.visible = false;
+      if(obj.parent.userData == "botiquin" && obj.parent.visible == true){
+        console.log("COLISION CON BOTIQUIN");
+        obj.parent.visible = false;
+      }
+
+      if(obj.parent.userData == "estrella" && obj.parent.visible == true){
+        console.log("COLISION CON ESTRELLA");
+        obj.parent.visible = false;
+      }
     }
 
     if(impactados2.length > 0){
       var obj = impactados2[0].object;
-      obj.parent.visible = false;
+      if(obj.parent.userData == "botiquin" && obj.parent.visible == true){
+        console.log("COLISION CON BOTIQUIN");
+        obj.parent.visible = false;
+      }
+
+      if(obj.parent.userData == "estrella" && obj.parent.visible == true){
+        console.log("COLISION CON ESTRELLA");
+        obj.parent.visible = false;
+      }
     }
 
     if(impactados3.length > 0){
       var obj = impactados3[0].object;
-      obj.parent.visible = false;
-      
+      if(obj.parent.userData == "botiquin" && obj.parent.visible == true){
+        console.log("COLISION CON BOTIQUIN");
+        obj.parent.visible = false;
+      }
+
+      if(obj.parent.userData == "estrella" && obj.parent.visible == true){
+        console.log("COLISION CON ESTRELLA");
+        obj.parent.visible = false;
+      }
     }
 
     if(impactados4.length > 0){
       var obj = impactados4[0].object;
-      obj.parent.visible = false;
+      if(obj.parent.userData == "botiquin" && obj.parent.visible == true){
+        console.log("COLISION CON BOTIQUIN");
+        obj.parent.visible = false;
+      }
+
+      if(obj.parent.userData == "estrella" && obj.parent.visible == true){
+        console.log("COLISION CON ESTRELLA");
+        obj.parent.visible = false;
+      }
     }
 
     if(impactados5.length > 0){
       var obj = impactados5[0].object;
-      obj.parent.visible = false;
-      
+      if(obj.parent.userData == "botiquin" && obj.parent.visible == true){
+        console.log("COLISION CON BOTIQUIN");
+        obj.parent.visible = false;
+      }
+
+      if(obj.parent.userData == "estrella" && obj.parent.visible == true){
+        console.log("COLISION CON ESTRELLA");
+        obj.parent.visible = false;
+      }
     }
 
     if(impactados6.length > 0){
       var obj = impactados6[0].object;
-      obj.parent.visible = false;
+      if(obj.parent.userData == "botiquin" && obj.parent.visible == true){
+        console.log("COLISION CON BOTIQUIN");
+        obj.parent.visible = false;
+      }
+
+      if(obj.parent.userData == "estrella" && obj.parent.visible == true){
+        console.log("COLISION CON ESTRELLA");
+        obj.parent.visible = false;
+      }
     }
 
     if(impactados7.length > 0){
       var obj = impactados7[0].object;
-      obj.parent.visible = false;
+      if(obj.parent.userData == "botiquin" && obj.parent.visible == true){
+        console.log("COLISION CON BOTIQUIN");
+        obj.parent.visible = false;
+      }
+
+      if(obj.parent.userData == "estrella" && obj.parent.visible == true){
+        console.log("COLISION CON ESTRELLA");
+        obj.parent.visible = false;
+      }
     }
 
     
@@ -382,37 +449,93 @@ class MyScene extends THREE.Scene {
 
     if(impactados.length > 0){
       var obj = impactados[0].object;
-      obj.parent.visible = false;
+      if(obj.parent.userData == "botiquin" && obj.parent.visible == true){
+        console.log("COLISION CON BOTIQUIN");
+        obj.parent.visible = false;
+      }
+
+      if(obj.parent.userData == "estrella" && obj.parent.visible == true){
+        console.log("COLISION CON ESTRELLA");
+        obj.parent.visible = false;
+      }
     }
 
     if(impactados2.length > 0){
       var obj = impactados2[0].object;
-      obj.parent.visible = false;
+      if(obj.parent.userData == "botiquin" && obj.parent.visible == true){
+        console.log("COLISION CON BOTIQUIN");
+        obj.parent.visible = false;
+      }
+
+      if(obj.parent.userData == "estrella" && obj.parent.visible == true){
+        console.log("COLISION CON ESTRELLA");
+        obj.parent.visible = false;
+      }
     }
 
     if(impactados3.length > 0){
       var obj = impactados3[0].object;
-      obj.parent.visible = false;
+      if(obj.parent.userData == "botiquin" && obj.parent.visible == true){
+        console.log("COLISION CON BOTIQUIN");
+        obj.parent.visible = false;
       }
+
+      if(obj.parent.userData == "estrella" && obj.parent.visible == true){
+        console.log("COLISION CON ESTRELLA");
+        obj.parent.visible = false;
+      }
+    }
 
     if(impactados4.length > 0){
       var obj = impactados4[0].object;
-      obj.parent.visible = false;
+      if(obj.parent.userData == "botiquin" && obj.parent.visible == true){
+        console.log("COLISION CON BOTIQUIN");
+        obj.parent.visible = false;
+      }
+
+      if(obj.parent.userData == "estrella" && obj.parent.visible == true){
+        console.log("COLISION CON ESTRELLA");
+        obj.parent.visible = false;
+      }
     }
 
     if(impactados5.length > 0){
       var obj = impactados5[0].object;
-      obj.parent.visible = false;
+      if(obj.parent.userData == "botiquin" && obj.parent.visible == true){
+        console.log("COLISION CON BOTIQUIN");
+        obj.parent.visible = false;
+      }
+
+      if(obj.parent.userData == "estrella" && obj.parent.visible == true){
+        console.log("COLISION CON ESTRELLA");
+        obj.parent.visible = false;
+      }
     }
 
     if(impactados6.length > 0){
       var obj = impactados6[0].object;
-      obj.parent.visible = false;
+      if(obj.parent.userData == "botiquin" && obj.parent.visible == true){
+        console.log("COLISION CON BOTIQUIN");
+        obj.parent.visible = false;
+      }
+
+      if(obj.parent.userData == "estrella" && obj.parent.visible == true){
+        console.log("COLISION CON ESTRELLA");
+        obj.parent.visible = false;
+      }
     }
 
     if(impactados7.length > 0){
       var obj = impactados7[0].object;
-      obj.parent.visible = false;
+      if(obj.parent.userData == "botiquin" && obj.parent.visible == true){
+        console.log("COLISION CON BOTIQUIN");
+        obj.parent.visible = false;
+      }
+
+      if(obj.parent.userData == "estrella" && obj.parent.visible == true){
+        console.log("COLISION CON ESTRELLA");
+        obj.parent.visible = false;
+      }
     }
 }
 

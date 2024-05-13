@@ -119,8 +119,8 @@ class Tanque extends THREE.Object3D{
 
         this.add(this.nodoPosOrientTubo);
 
-        var tiempo = 50000;
-        var animacion = new TWEEN.Tween(this.origen).to(this.destino, tiempo)
+        this.tiempo = 50000;
+        var animacion = new TWEEN.Tween(this.origen).to(this.destino, this.tiempo)
         .onUpdate(() => {
             var posicion = this.path.getPointAt(this.origen.t);
             this.nodoPosOrientTubo.position.copy(posicion);
@@ -130,6 +130,7 @@ class Tanque extends THREE.Object3D{
             var segmentoActual = Math.floor(this.origen.t * this.segmentos);
             this.nodoPosOrientTubo.up = this.tubo.binormals[segmentoActual];
             this.nodoPosOrientTubo.lookAt(posicion);
+
         })
         .repeat(Infinity)
         .start();
