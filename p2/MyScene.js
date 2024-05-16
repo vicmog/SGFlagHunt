@@ -12,6 +12,7 @@ import { Luna } from '../objetosP2/Luna.js';
 import { Botiquin } from '../objetosP2/Botiquin.js';
 import { Misil } from '../objetosP2/Misil.js';
 import { Estrella } from '../objetosP2/Estrella.js'
+import { Dron } from '../objetosP2/Dron.js'
 
  
 /// La clase fachada del modelo
@@ -55,6 +56,7 @@ class MyScene extends THREE.Scene {
     this.misil = new Misil(this.tubo.getTubeGeometry(),0,0);
     this.misil2 = new Misil(this.tubo.getTubeGeometry(),0.5,200);
     this.misil3 = new Misil(this.tubo.getTubeGeometry(),0.7,100);
+    this.dron = new Dron(this.tubo.getTubeGeometry(),0.5);
     // Mover la luna
     this.luna.position.set(-100, 100, 10);
 
@@ -93,6 +95,8 @@ class MyScene extends THREE.Scene {
     this.add(this.misil);
     this.add(this.misil2);
     this.add(this.misil3);
+
+    this.add(this.dron);
 
     this.add(this.luna);
     this.add(this.tanque);
@@ -598,6 +602,7 @@ class MyScene extends THREE.Scene {
     // Se actualiza el resto del modelo
     this.tubo.update();
     this.tanque.update();
+    this.dron.update();
     
      // Colisiones
      //this.createRayos();
