@@ -107,9 +107,10 @@ class Misil extends THREE.Object3D{
             this.nodoPosOrientTubo.position.copy(posicion);
             var tangente = this.path.getTangentAt(this.origen.t);
             posicion.add(tangente);
+
             if(this.origen.t == 0){
                 console.log("Misil visible");
-                this.misil.visible = true;
+                this.visible = true;
             }
             var segmentoActual = Math.floor(this.origen.t * this.segmentos);
             this.nodoPosOrientTubo.up = this.tubo.binormals[segmentoActual];
