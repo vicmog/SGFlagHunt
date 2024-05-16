@@ -16,6 +16,7 @@ class Tanque extends THREE.Object3D{
         this.segmentos = geometriaTubo.parameters.tubularSegments;
         this.t = 0 ;
         this.alfa = 0;
+        this.contador_vueltas = 0;
 
         this.camera = null;
 
@@ -130,6 +131,16 @@ class Tanque extends THREE.Object3D{
             var segmentoActual = Math.floor(this.origen.t * this.segmentos);
             this.nodoPosOrientTubo.up = this.tubo.binormals[segmentoActual];
             this.nodoPosOrientTubo.lookAt(posicion);
+            // Si la posicion es el inicio aumento las vueltas en 1
+            if((this.origen.t % 1) == 0){
+                this.aumentarContador();
+                this.tiempo = this.tiempo * 0.5;
+                if(this.tiempo < 20000){
+                    this.tiempo = 20000;
+                }
+                animacion.duration(this.tiempo);
+                console.log("Vueltas: "+this.contador_vueltas + " Tiempo: "+this.tiempo);
+            }
 
         })
         .repeat(Infinity)
@@ -146,6 +157,10 @@ class Tanque extends THREE.Object3D{
         this.camera.getWorldPosition(target);
         target.add(puntoDeMiraRelativo);
         this.camera.lookAt(target);
+    }
+
+    aumentarContador(){
+        this.contador_vueltas++;
     }
 
     getCameraPersonaje () {

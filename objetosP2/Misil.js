@@ -12,7 +12,7 @@ class Misil extends THREE.Object3D{
         this.segmentos = geometriaTubo.parameters.tubularSegments;
         this.t = t;
         this.alfa = alfa;
-
+        
 
         this.origen = {t:1};
         this.destino = {t:0};
