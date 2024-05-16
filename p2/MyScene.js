@@ -549,14 +549,19 @@ class MyScene extends THREE.Scene {
     this.raton.x = (event.clientX / window.innerWidth) * 2 - 1;
     this.raton.y = 1 - 2 * (event.clientY / window.innerHeight);
     this.raycasterRaton.setFromCamera(this.raton, this.getCamera());
-    var pickableObjects = [this.luna,this.misil,this.misil2,this.misil3];
+    var pickableObjects = [this.luna,this.misil,this.misil2,this.misil3,this.dron];
     
     var pickedObjects = this.raycasterRaton.intersectObjects(pickableObjects, true);
 
     if (pickedObjects.length > 0) { 
         var objeto = pickedObjects[0].object;
         var selectedPoint = pickedObjects[0].point;
-        objeto.parent.visible = false;
+        while (objeto.parent && objeto.parent !== this) {
+          objeto = objeto.parent;
+        }
+      
+      // Ahora `objeto` es el primer padre del objeto seleccionado
+        objeto.visible = false;
         console.log(objeto);
         console.log(selectedPoint);
     }
