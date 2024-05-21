@@ -28,6 +28,7 @@ class Estrella extends THREE.Object3D{
         this.estrella = new THREE.Mesh(estrellaGeometria, material);
         return this.estrella;
     }
+    
     constructor(geometriaTubo,t){
         super();
 
@@ -75,7 +76,11 @@ class Estrella extends THREE.Object3D{
         nodoPosOrientTubo.up = this.tubo.binormals[segmentoActual];
         nodoPosOrientTubo.lookAt(posTmp);
 
+        var luz = new THREE.PointLight(0xFFFF00, 1, 100);
+        luz.power = 1000;
+        luz.position.set(0, 1, 0);
 
+        nodoTraslacionY.add(luz);
         this.estrella.userData = "estrella";
 
         this.add(nodoPosOrientTubo);
