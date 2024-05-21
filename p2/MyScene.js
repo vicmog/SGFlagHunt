@@ -37,8 +37,8 @@ class MyScene extends THREE.Scene {
     
     // Todo elemento que se desee sea tenido en cuenta en el renderizado de la escena debe pertenecer a esta. Bien como hijo de la escena (this en esta clase) o como hijo de un elemento que ya esté en la escena.
     // Tras crear cada elemento se añadirá a la escena con   this.add(variable)
-    ////this.createLights ();
-
+    //this.createLights ();
+    
     // Tendremos una cámara con un control de movimiento con el ratón
     this.createCamera ();
     
@@ -69,6 +69,9 @@ class MyScene extends THREE.Scene {
     this.estrella = new Estrella(this.tubo.getTubeGeometry(), 0.3);
     this.estrella2 = new Estrella(this.tubo.getTubeGeometry(), 0.6);
     this.estrella3 = new Estrella(this.tubo.getTubeGeometry(), 0.8);
+
+
+
 
 
     this.createRayos();
