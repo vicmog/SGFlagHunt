@@ -7,7 +7,8 @@ import { GUI } from '../libs/dat.gui.module.js'
 import { TrackballControls } from '../libs/TrackballControls.js'
 import { Dron } from './Dron.js'
 import { Tanque } from './Tanque.js';
-
+import { Estrella } from './Estrella.js'
+import { Luna } from './Luna.js'
  
 /// La clase fachada del modelo
 /**
@@ -42,8 +43,13 @@ class MyScene extends THREE.Scene {
     // Todas las unidades están en metros
     this.axis = new THREE.AxesHelper (10);
     this.add (this.axis);
-    this.tanque = new Tanque();
-    this.add(this.tanque);
+    //this.tanque = new Tanque();
+    //this.add(this.tanque);
+    this.estrella = new Estrella();
+    this.add(this.estrella);
+
+    this.luna = new Luna();
+    //this.add(this.luna);
   }
   
   createCamera () {
@@ -206,8 +212,8 @@ class MyScene extends THREE.Scene {
     this.cameraControl.update();
     
     // Se actualiza el resto del modelo
-    this.tanque.update();
-    
+    //this.tanque.update();
+    this.estrella.update();
     // Este método debe ser llamado cada vez que queramos visualizar la escena de nuevo.
     // Literalmente le decimos al navegador: "La próxima vez que haya que refrescar la pantalla, llama al método que te indico".
     // Si no existiera esta línea,  update()  se ejecutaría solo la primera vez.

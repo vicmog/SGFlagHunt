@@ -28,8 +28,16 @@ class Estrella extends THREE.Object3D{
         this.estrella = new THREE.Mesh(estrellaGeometria, material);
         return this.estrella;
     }
-    constructor(){
+    constructor(geometriaTubo,t){
         super();
+
+        this.tubo = geometriaTubo;
+        this.path = geometriaTubo.parameters.path;
+        this.radio = geometriaTubo.parameters.radius;
+        this.segmentos = geometriaTubo.parameters.tubularSegments;
+        this.t = 0;
+        this.alfa = 0;
+
 
         var material = new THREE.MeshStandardMaterial({
             color: 0xFFFFD700,
@@ -42,7 +50,35 @@ class Estrella extends THREE.Object3D{
         this.estrella = new THREE.Object3D();
         this.estrella.add(estrella);
 
-        this.add(this.estrella);
+        // NODO TRASLACION Y
+        var nodoTraslacionY = new THREE.Object3D();
+        nodoTraslacionY.position.y = 0;
+        nodoTraslacionY.add(this.estrella);
+        nodoTraslacionY.position.y += this.radio + 0.05;
+
+
+        // NODO ROTACION Z
+        var nodoRotacionZ = new THREE.Object3D();
+        nodoRotacionZ.add(nodoTraslacionY);
+        nodoRotacionZ.rotateZ(this.alfa);
+
+        // NODO POSICION Y ORIENTACION TUBO
+        var nodoPosOrientTubo = new THREE.Object3D();
+        nodoPosOrientTubo.add(nodoRotacionZ);
+        var posTmp = this.path.getPointAt(t);
+        nodoPosOrientTubo.position.copy(posTmp);
+
+
+        var tangente = this.path.getTangentAt(t);
+        posTmp.add(tangente);
+        var segmentoActual = Math.floor(t * this.segmentos);
+        nodoPosOrientTubo.up = this.tubo.binormals[segmentoActual];
+        nodoPosOrientTubo.lookAt(posTmp);
+
+
+        this.estrella.userData = "estrella";
+
+        this.add(nodoPosOrientTubo);
     }
 
     update(){
