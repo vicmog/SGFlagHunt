@@ -5,7 +5,9 @@ import { Cubo } from '../primitivas/Cubo.js';
 class Tubo extends THREE.Object3D {
     constructor() {
         super();
-        var material = new THREE.MeshNormalMaterial();
+        var material = new THREE.MeshBasicMaterial(
+            { color: 0xffffff}
+        );
 
         const radius = 60;
         const tube = 5;

@@ -6,7 +6,7 @@ import * as THREE from '../libs/three.module.js'
 import { GUI } from '../libs/dat.gui.module.js'
 import { TrackballControls } from '../libs/TrackballControls.js'
 import { Tubo } from './tubo.js'
-import { Tanque } from '../objetosP2/Tanque.js'
+import { Tanque } from './Tanque.js'
 import * as KeyCode from '../libs/keycode.esm.js';
 import { Luna } from '../objetosP2/Luna.js';
 import { Botiquin } from '../objetosP2/Botiquin.js';
@@ -37,7 +37,7 @@ class MyScene extends THREE.Scene {
     
     // Todo elemento que se desee sea tenido en cuenta en el renderizado de la escena debe pertenecer a esta. Bien como hijo de la escena (this en esta clase) o como hijo de un elemento que ya esté en la escena.
     // Tras crear cada elemento se añadirá a la escena con   this.add(variable)
-    this.createLights ();
+    //this.createLights ();
     
     // Tendremos una cámara con un control de movimiento con el ratón
     this.createCamera ();
@@ -210,7 +210,7 @@ class MyScene extends THREE.Scene {
     var renderer = new THREE.WebGLRenderer();
     
     // Se establece un color de fondo en las imágenes que genera el render
-    renderer.setClearColor(new THREE.Color(0xEEEEEE), 1.0);
+    renderer.setClearColor(new THREE.Color(0x000000), 1.0);
     
     // Se establece el tamaño, se aprovecha la totalidad de la ventana del navegador
     renderer.setSize(window.innerWidth, window.innerHeight);
@@ -617,8 +617,6 @@ class MyScene extends THREE.Scene {
     this.tanque.update();
     this.dron.update();
     
-     // Colisiones
-     //this.createRayos();
 
     // Este método debe ser llamado cada vez que queramos visualizar la escena de nuevo.
     // Literalmente le decimos al navegador: "La próxima vez que haya que refrescar la pantalla, llama al método que te indico".

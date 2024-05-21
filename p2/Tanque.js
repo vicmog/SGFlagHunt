@@ -5,19 +5,28 @@ import * as TWEEN from '../libs/tween.esm.js';
 
 class Tanque extends THREE.Object3D {
 
-    constructor() {
+    constructor(geometriaTubo) {
         super();
+
+        this.tubo = geometriaTubo;
+        this.path = geometriaTubo.parameters.path;
+        this.radio = geometriaTubo.parameters.radius;
+        this.segmentos = geometriaTubo.parameters.tubularSegments;
+        this.t = 0;
+        this.alfa = 0;
+        this.contador_vueltas = 0;
+
+        this.camera = null;
+
+        this.rotacionMinimaCanion = -Math.PI /200; 
+        this.rotacionMaximaCanion = Math.PI / 200;
+        this.rotacionCanionActual = 0;
+        this.movIzq = true;
+        this.movDer = false;
 
         this.rotacionMinima = -Math.PI / 5; 
         this.rotacionMaxima = Math.PI / 5; 
         this.duracionRotacion = 2000; // duración de la animación en milisegundos
-
-
-        this.rotacionMinimaCanion = -Math.PI /100; 
-        this.rotacionMaximaCanion = Math.PI / 100;
-        this.rotacionCanionActual = 0;
-        this.movIzq = true;
-        this.movDer = false;
 
         var material = new THREE.MeshNormalMaterial();
         var material2 = new THREE.MeshStandardMaterial({ color: 0x0000ff });
@@ -33,7 +42,7 @@ class Tanque extends THREE.Object3D {
         cuerpoMiraTanqueGeometria.translate(0, 2.5, 0);
         cuerpoMiraTanqueGeometria.scale(1, 1, 1.5);
 
-        var cuerpoCanionTanqueGeometria = new THREE.CylinderGeometry(0.35, 0.35, 10, 64);
+        var cuerpoCanionTanqueGeometria = new THREE.CylinderGeometry(0.35, 0.35, 8, 64);
         cuerpoCanionTanqueGeometria.rotateX(Math.PI / 2);
         cuerpoCanionTanqueGeometria.rotateY(Math.PI / 2);
         cuerpoCanionTanqueGeometria.translate(-4, 2.7, 0);
@@ -41,7 +50,10 @@ class Tanque extends THREE.Object3D {
         var cuerpoRecubrimentoCanionTanqueGeometria = new THREE.CylinderGeometry(0.5, 0.5, 4, 64);
         cuerpoRecubrimentoCanionTanqueGeometria.rotateX(Math.PI / 2);
         cuerpoRecubrimentoCanionTanqueGeometria.rotateY(Math.PI / 2);
-        cuerpoRecubrimentoCanionTanqueGeometria.translate(-4, 2.7, 0);
+        cuerpoRecubrimentoCanionTanqueGeometria.translate(-3.3, 2.7, 0);
+
+       
+
 
         var cuerpoCupulaTanqueGeometria = new THREE.SphereGeometry(1, 32, 32);
         cuerpoCupulaTanqueGeometria.scale(1, 0.5, 1);
@@ -60,7 +72,6 @@ class Tanque extends THREE.Object3D {
         this.canionAnimacion = new THREE.Object3D();
         this.canionAnimacion.add(this.cuerpoCanionTanque);
         this.canionAnimacion.add(this.cuerpoRecubrimentoCanionTanque);
-        //this.canionAnimacion.rotateY(Math.PI / 2);
         this.cuerpoCupulaTanque = new THREE.Mesh(cuerpoCupulaTanqueGeometria, material);
 
         // Nodo Girar Animacion
@@ -79,24 +90,111 @@ class Tanque extends THREE.Object3D {
         this.cuerpoRueda5 = new THREE.Mesh(cuerpoRuedaGeometria, material2);
         this.cuerpoRueda5.position.x = 3.7;
 
+        // NODO PERSONAJE
         this.tanque = new THREE.Object3D();
-
         this.tanque.add(this.cuerpoTanque);
         this.tanque.add(this.cuerpoSoporte);
+        // Circulo girar
         this.tanque.add(this.cuerpoMiraTanqueGirar);
         this.tanque.add(this.cuerpoRueda1);
         this.tanque.add(this.cuerpoRueda2);
         this.tanque.add(this.cuerpoRueda3);
         this.tanque.add(this.cuerpoRueda4);
         this.tanque.add(this.cuerpoRueda5);
-        
+
         this.tanque.scale.set(0.35, 0.35, 0.35);
         this.tanque.rotateY(Math.PI / 2);
 
-        this.add(this.tanque);
+        this.origen = { t: 0 };
+        this.destino = { t: 1 };
+
+        // NODO TRANSLACION Y
+        this.nodoTranslacionY = new THREE.Object3D();
+        this.nodoTranslacionY.add(this.tanque);
+        this.nodoTranslacionY.position.y += this.radio + 0.05;
+
+        this.createCamara();
+
+        // NODO ROTACION Z
+        this.nodoRotacionZ = new THREE.Object3D();
+        this.nodoRotacionZ.add(this.nodoTranslacionY);
+        this.nodoRotacionZ.rotateZ(this.alfa);
+        // NODO POSICION Y ORIENTACION TUBO
+        this.nodoPosOrientTubo = new THREE.Object3D();
+        this.nodoPosOrientTubo.add(this.nodoRotacionZ);
+        var posTmp = this.path.getPointAt(this.origen.t);
+        this.nodoPosOrientTubo.position.copy(posTmp);
+
+        var tangente = this.path.getTangentAt(this.origen.t);
+        posTmp.add(tangente);
+        var segmentoActual = Math.floor(this.origen.t * this.segmentos);
+        this.nodoPosOrientTubo.up = this.tubo.binormals[segmentoActual];
+        this.nodoPosOrientTubo.lookAt(posTmp);
+
+        this.luz = new THREE.PointLight(0xff0000, 1, 100);
+        this.luz.position.set(-5, 0, 0); // Posición relativa al tanque
+        this.add(this.luz);
+
+        this.add(this.nodoPosOrientTubo);
+
+        this.tiempo = 50000;
+        var animacion = new TWEEN.Tween(this.origen).to(this.destino, this.tiempo)
+            .onUpdate(() => {
+                var posicion = this.path.getPointAt(this.origen.t);
+                this.nodoPosOrientTubo.position.copy(posicion);
+                var tangente = this.path.getTangentAt(this.origen.t);
+                posicion.add(tangente);
+
+                var segmentoActual = Math.floor(this.origen.t * this.segmentos);
+                this.nodoPosOrientTubo.up = this.tubo.binormals[segmentoActual];
+                this.nodoPosOrientTubo.lookAt(posicion);
+                // Si la posicion es el inicio aumento las vueltas en 1
+                if ((this.origen.t % 1) == 0) {
+                    this.aumentarContador();
+                    this.tiempo = this.tiempo * 0.9;
+                    if (this.tiempo < 20000) {
+                        this.tiempo = 20000;
+                    }
+                    animacion.duration(this.tiempo);
+                    console.log("Vueltas: " + this.contador_vueltas + " Tiempo: " + this.tiempo);
+                }
+
+            })
+            .repeat(Infinity)
+            .start();
+
+        // Animación de rotación de la cabeza del tanque
         this.animacionRotacion();
     }
 
+    createCamara() {
+        this.camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 1000);
+        this.nodoTranslacionY.add(this.camera);
+        this.camera.position.set(0, 7, -20);
+        var puntoDeMiraRelativo = new THREE.Vector3(0, -1, 20);
+        var target = new THREE.Vector3(0, 0, 0);
+        this.camera.getWorldPosition(target);
+        target.add(puntoDeMiraRelativo);
+        this.camera.lookAt(target);
+    }
+
+    aumentarContador() {
+        this.contador_vueltas++;
+    }
+
+    getCameraPersonaje() {
+        return this.camera;
+    }
+
+    girarDerecha() {
+        this.alfa += 0.001;
+        this.nodoRotacionZ.rotateZ(this.alfa);
+    }
+
+    girarIzda() {
+        this.alfa += 0.001;
+        this.nodoRotacionZ.rotateZ(-this.alfa);
+    }
 
     animacionRotacion() {
         var _this = this;
@@ -111,17 +209,18 @@ class Tanque extends THREE.Object3D {
             .start();
     }
 
-
     update() {
+        this.luz.position.copy(this.nodoPosOrientTubo.position);
+
         if(this.movDer){
-            this.rotacionCanionActual += 0.003;
+            this.rotacionCanionActual += 0.0009;
             this.canionAnimacion.rotateZ(this.rotacionCanionActual);
             if(this.rotacionCanionActual >= this.rotacionMaximaCanion){
                 this.movDer = false;
                 this.movIzq = true;
             }
         }else if(this.movIzq){
-            this.rotacionCanionActual -= 0.003;
+            this.rotacionCanionActual -= 0.0009;
             this.canionAnimacion.rotateZ(this.rotacionCanionActual);
             if(this.rotacionCanionActual <= this.rotacionMinimaCanion){
                 this.movDer = true;
