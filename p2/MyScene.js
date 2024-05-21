@@ -11,7 +11,7 @@ import * as KeyCode from '../libs/keycode.esm.js';
 import { Luna } from '../objetosP2/Luna.js';
 import { Botiquin } from '../objetosP2/Botiquin.js';
 import { Misil } from '../objetosP2/Misil.js';
-import { Estrella } from '../objetosP2/Estrella.js'
+import { Estrella } from './Estrella.js'
 import { Dron } from '../objetosP2/Dron.js'
 
  
@@ -616,7 +616,9 @@ class MyScene extends THREE.Scene {
     this.tubo.update();
     this.tanque.update();
     this.dron.update();
-    
+    this.estrella.update();
+    this.estrella2.update();
+    this.estrella3.update();
      // Colisiones
      //this.createRayos();
 

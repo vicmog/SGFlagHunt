@@ -5,7 +5,24 @@ import { Cubo } from '../primitivas/Cubo.js';
 class Tubo extends THREE.Object3D {
     constructor() {
         super();
-        var material = new THREE.MeshNormalMaterial();
+
+        var textureLoader = new THREE.TextureLoader();
+        var texturaColor = textureLoader.load('../imgs/texturatubo/Rock051_1K-JPG_Color.jpg');
+        var textureBump = textureLoader.load('../imgs/texturatubo/Rock051_1K-JPG_Displacement.jpg');
+        var texturaNormal = textureLoader.load('../imgs/texturatubo/Rock051_1K-JPG_NormalGL.jpg');
+        var texturaRoughness = textureLoader.load('../imgs/texturatubo/Rock051_1K-JPG_Roughness.jpg');
+        var texturaAmbientOcclusion = textureLoader.load('../imgs/texturatubo/Rock051_1K-JPG_AmbientOcclusion.jpg');
+        var texturaMetalness = textureLoader.load('../imgs/texturatubo/Rock051_1K-JPG_Metalness.jpg');
+
+        const material = new THREE.MeshStandardMaterial({
+            map: texturaColor,
+            bumpMap: textureBump,
+            bumpScale: 0.2,
+            normalMap: texturaNormal,
+            roughnessMap: texturaRoughness,
+            aoMap: texturaAmbientOcclusion,
+            metalnessMap: texturaMetalness
+        });
 
         const radius = 60;
         const tube = 5;

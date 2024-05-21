@@ -134,7 +134,7 @@ class Tanque extends THREE.Object3D{
             // Si la posicion es el inicio aumento las vueltas en 1
             if((this.origen.t % 1) == 0){
                 this.aumentarContador();
-                this.tiempo = this.tiempo * 0.5;
+                this.tiempo = this.tiempo * 0.9;
                 if(this.tiempo < 20000){
                     this.tiempo = 20000;
                 }
