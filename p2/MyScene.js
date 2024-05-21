@@ -70,9 +70,6 @@ class MyScene extends THREE.Scene {
     this.estrella2 = new Estrella(this.tubo.getTubeGeometry(), 0.6);
     this.estrella3 = new Estrella(this.tubo.getTubeGeometry(), 0.8);
 
-var luzTanque = this.luzTanque();
-    this.add(luzTanque);
-
 
     this.createRayos();
 
