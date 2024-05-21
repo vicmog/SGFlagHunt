@@ -105,8 +105,11 @@ class Dron extends THREE.Object3D{
     }
 
     update(){
+        //Rotación del dron
         this.alfa=0.01;
         this.nodoRotacionZ.rotateZ(this.alfa);
+
+        //Movimiento de las hélices
         this.arrayHelices.forEach(helice => {
             helice.rotation.y += 0.5;
         });

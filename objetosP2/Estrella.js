@@ -39,7 +39,11 @@ class Estrella extends THREE.Object3D{
         this.alfa = 0;
 
 
-        var material = new THREE.MeshNormalMaterial();
+        var material = new THREE.MeshStandardMaterial({
+            color: 0xFFFFD700,
+            roughness: 0.5,
+            metalness: 0.2,
+        });
         var estrella = this.createEstrella(material);
         
         //Nodo estrella

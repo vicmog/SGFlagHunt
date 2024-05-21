@@ -169,6 +169,14 @@ class MyScene extends THREE.Scene {
     // La luz ambiental solo tiene un color y una intensidad
     // Se declara como   var   y va a ser una variable local a este método
     //    se hace así puesto que no va a ser accedida desde otros métodos
+    const ambientLight = new THREE.AmbientLight(0x404040);
+    this.add(ambientLight);
+
+
+    const pointLight = new THREE.PointLight(0xffffff, 1);
+    pointLight.position.set(5, 5, 5);
+    this.add(pointLight);
+
     this.ambientLight = new THREE.AmbientLight('white', this.guiControls.ambientIntensity);
     // La añadimos a la escena
     this.add (this.ambientLight);
