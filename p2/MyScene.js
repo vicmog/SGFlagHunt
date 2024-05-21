@@ -10,7 +10,7 @@ import { Tanque } from './Tanque.js'
 import * as KeyCode from '../libs/keycode.esm.js';
 import { Luna } from '../objetosP2/Luna.js';
 import { Botiquin } from '../objetosP2/Botiquin.js';
-import { Misil } from '../objetosP2/Misil.js';
+import { Misil } from './Misil.js';
 import { Estrella } from './Estrella.js'
 import { Dron } from '../objetosP2/Dron.js'
 
@@ -37,7 +37,7 @@ class MyScene extends THREE.Scene {
     
     // Todo elemento que se desee sea tenido en cuenta en el renderizado de la escena debe pertenecer a esta. Bien como hijo de la escena (this en esta clase) o como hijo de un elemento que ya esté en la escena.
     // Tras crear cada elemento se añadirá a la escena con   this.add(variable)
-    this.createLights ();
+    //this.createLights ();
     
     // Tendremos una cámara con un control de movimiento con el ratón
     this.createCamera ();
@@ -169,7 +169,7 @@ class MyScene extends THREE.Scene {
     // La luz ambiental solo tiene un color y una intensidad
     // Se declara como   var   y va a ser una variable local a este método
     //    se hace así puesto que no va a ser accedida desde otros métodos
-    const ambientLight = new THREE.AmbientLight(0xff0000);
+    const ambientLight = new THREE.AmbientLight(0xffffff);
     this.add(ambientLight);
 
 

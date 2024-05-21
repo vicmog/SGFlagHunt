@@ -28,7 +28,7 @@ class Tanque extends THREE.Object3D {
         this.rotacionMaxima = Math.PI / 5; 
         this.duracionRotacion = 2000; // duración de la animación en milisegundos
 
-        var material = new THREE.MeshNormalMaterial();
+        var material = new THREE.MeshStandardMaterial({color: 0x00ff00});
         var material2 = new THREE.MeshStandardMaterial({ color: 0x0000ff });
 
         var cuerpoRuedasGeometria = new THREE.CylinderGeometry(2, 2, 10, 64);
@@ -113,6 +113,17 @@ class Tanque extends THREE.Object3D {
         this.nodoTranslacionY.add(this.tanque);
         this.nodoTranslacionY.position.y += this.radio + 0.05;
 
+        this.luz = new THREE.SpotLight(0xffffff);
+        this.luz.power = 1000;
+        this.luz.angle = Math.PI / 2;
+        this.luz.penumbra = 1;
+        this.luz.position.set(0,10,0);
+        this.luz.target = this.nodoTranslacionY;
+        this.nodoTranslacionY.add(this.luz);
+
+
+
+
         this.createCamara();
 
         // NODO ROTACION Z
@@ -131,9 +142,7 @@ class Tanque extends THREE.Object3D {
         this.nodoPosOrientTubo.up = this.tubo.binormals[segmentoActual];
         this.nodoPosOrientTubo.lookAt(posTmp);
 
-        this.luz = new THREE.PointLight(0xff0000, 1, 100);
-        this.luz.position.set(-5, 0, 0); // Posición relativa al tanque
-        this.add(this.luz);
+        
 
         this.add(this.nodoPosOrientTubo);
 
@@ -210,7 +219,6 @@ class Tanque extends THREE.Object3D {
     }
 
     update() {
-        this.luz.position.copy(this.nodoPosOrientTubo.position);
 
         if(this.movDer){
             this.rotacionCanionActual += 0.0009;
