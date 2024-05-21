@@ -76,6 +76,7 @@ class Estrella extends THREE.Object3D{
         nodoPosOrientTubo.up = this.tubo.binormals[segmentoActual];
         nodoPosOrientTubo.lookAt(posTmp);
 
+        
         var luz = new THREE.PointLight(0xFFFF00, 1, 100);
         luz.power = 1000;
         luz.position.set(0, 1, 0);
