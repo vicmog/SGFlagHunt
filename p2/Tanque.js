@@ -8,6 +8,21 @@ class Tanque extends THREE.Object3D {
     constructor(geometriaTubo) {
         super();
 
+        var textureLoader = new THREE.TextureLoader();
+        var texturaColor = textureLoader.load('../imgs/tanquecamo.jpg');
+        texturaColor.wrapS = THREE.RepeatWrapping;
+        texturaColor.wrapT = THREE.RepeatWrapping;
+        texturaColor.repeat.set(2, 2);
+        const material = new THREE.MeshStandardMaterial({
+            map: texturaColor,
+            roughness: 0.2,
+            metalness: 0.6,
+        });
+        const material2 = new THREE.MeshStandardMaterial({ 
+            color: 0x000000, 
+        });
+        material.map.needsUpdate = true;
+
         this.tubo = geometriaTubo;
         this.path = geometriaTubo.parameters.path;
         this.radio = geometriaTubo.parameters.radius;
@@ -28,8 +43,8 @@ class Tanque extends THREE.Object3D {
         this.rotacionMaxima = Math.PI / 5; 
         this.duracionRotacion = 2000; // duración de la animación en milisegundos
 
-        var material = new THREE.MeshStandardMaterial({color: 0x00ff00});
-        var material2 = new THREE.MeshStandardMaterial({ color: 0x0000ff });
+        //var material = new THREE.MeshStandardMaterial({color: 0x00ff00});
+        //var material2 = new THREE.MeshStandardMaterial({ color: 0x0000ff });
 
         var cuerpoRuedasGeometria = new THREE.CylinderGeometry(2, 2, 10, 64);
         cuerpoRuedasGeometria.rotateX(Math.PI / 2);
