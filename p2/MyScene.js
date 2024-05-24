@@ -72,6 +72,9 @@ class MyScene extends THREE.Scene {
     this.estrella2 = new Estrella(this.tubo.getTubeGeometry(), 0.6);
     this.estrella3 = new Estrella(this.tubo.getTubeGeometry(), 0.8);
 
+    this.candidatos = [this.botiquin, this.botiquin2, this.botiquin3, this.botiquin4, this.botiquin5, this.estrella, this.estrella2, this.estrella3];
+
+
 
 
 
@@ -252,14 +255,9 @@ class MyScene extends THREE.Scene {
   }
   // Funcion para colisiones
   createRayos(){
-    var distancia = 5;
-    this.rayo = new THREE.Raycaster(new THREE.Vector3(), new THREE.Vector3(0,0,0), 0, distancia);
-    this.rayo2 = new THREE.Raycaster(new THREE.Vector3(), new THREE.Vector3(0,0,0), 0, distancia);
-    this.rayo3 = new THREE.Raycaster(new THREE.Vector3(), new THREE.Vector3(0,0,0), 0, distancia);
-    this.rayo4 = new THREE.Raycaster(new THREE.Vector3(), new THREE.Vector3(0,0,0), 0, distancia);
-    this.rayo5 = new THREE.Raycaster(new THREE.Vector3(), new THREE.Vector3(0,0,0), 0, distancia);
-    this.rayo6 = new THREE.Raycaster(new THREE.Vector3(), new THREE.Vector3(0,0,0), 0, distancia);
-    this.rayo7 = new THREE.Raycaster(new THREE.Vector3(), new THREE.Vector3(0,0,0), 0, distancia);
+    var distancia = 2;
+    this.rayos = [];
+    let posiciones = [];
 
     var posicion  = new THREE.Vector3();
     this.tanque.nodoTranslacionY.getWorldPosition(posicion);
@@ -267,292 +265,136 @@ class MyScene extends THREE.Scene {
     var direccion = new THREE.Vector3(0,0,0);
     this.tanque.nodoPosOrientTubo.getWorldDirection(direccion);
 
+    posiciones.push(posicion);
 
     var posicionPrimerRayo = posicion.clone();
     posicionPrimerRayo.y -= 1;
-    this.rayo.set(posicionPrimerRayo, direccion);
-
+    posiciones.push(posicionPrimerRayo);
 
     var posicionSegundoRayo = posicion.clone();
     posicionSegundoRayo.y -= 2;
     posicionSegundoRayo.x += 1;
-    this.rayo2.set(posicionSegundoRayo, direccion);
-
+    posiciones.push(posicionSegundoRayo);
 
     var posicionTercerRayo = posicion.clone();
     posicionTercerRayo.y -= 2;
     posicionTercerRayo.x -= 1;
-    this.rayo3.set(posicionTercerRayo, direccion);
-
+    posiciones.push(posicionTercerRayo);
 
     var posicionCuartoRayo = posicion.clone();
     posicionCuartoRayo.y += 0.2;
     posicionCuartoRayo.x += 1;
-    this.rayo4.set(posicionCuartoRayo, direccion);
-
+    posiciones.push(posicionCuartoRayo);
 
     var posicionQuintoRayo = posicion.clone();
     posicionQuintoRayo.y += 0.1;
     posicionQuintoRayo.x -= 1;
-    this.rayo5.set(posicionQuintoRayo, direccion);
-
+    posiciones.push(posicionQuintoRayo);
 
     var posicionSextoRayo = posicion.clone();
     posicionSextoRayo.y += 0.1;
-    this.rayo6.set(posicionSextoRayo, direccion);
-
+    posiciones.push(posicionSextoRayo);
 
     var posicionSeptimoRayo = posicion.clone();
     posicionSeptimoRayo.y -= 2;
-    this.rayo7.set(posicionSeptimoRayo, direccion);
+    posiciones.push(posicionSeptimoRayo);
 
 
-    
-    this.candidatos = [this.botiquin, this.botiquin2, this.botiquin3, this.botiquin4, this.botiquin5, this.estrella, this.estrella2, this.estrella3];
-
-    var impactados = this.rayo.intersectObjects(this.candidatos, true);
-    var impactados2 = this.rayo2.intersectObjects(this.candidatos, true);
-    var impactados3 = this.rayo3.intersectObjects(this.candidatos, true);
-    var impactados4 = this.rayo4.intersectObjects(this.candidatos, true);
-    var impactados5 = this.rayo5.intersectObjects(this.candidatos, true);
-    var impactados6 = this.rayo6.intersectObjects(this.candidatos, true);
-    var impactados7 = this.rayo7.intersectObjects(this.candidatos, true);
-
-    if(impactados.length > 0){
-      var obj = impactados[0].object;
-      if(obj.parent.userData == "botiquin" && obj.parent.visible == true){
-        console.log("COLISION CON BOTIQUIN");
-        obj.parent.visible = false;
-      }
-
-      if(obj.parent.userData == "estrella" && obj.parent.visible == true){
-        console.log("COLISION CON ESTRELLA");
-        obj.parent.visible = false;
-      }
+    for(let i = 0; i < posiciones.length; i++){
+      this.rayos.push(new THREE.Raycaster(posiciones[i], direccion,0,distancia));
     }
 
-    if(impactados2.length > 0){
-      var obj = impactados2[0].object;
-      if(obj.parent.userData == "botiquin" && obj.parent.visible == true){
-        console.log("COLISION CON BOTIQUIN");
-        obj.parent.visible = false;
-      }
+    this.impactados = [];
 
-      if(obj.parent.userData == "estrella" && obj.parent.visible == true){
-        console.log("COLISION CON ESTRELLA");
-        obj.parent.visible = false;
-      }
+    for(let i = 0; i < this.rayos.length; i++){
+      this.impactados.push(this.rayos[i].intersectObjects(this.candidatos, true));
     }
 
-    if(impactados3.length > 0){
-      var obj = impactados3[0].object;
-      if(obj.parent.userData == "botiquin" && obj.parent.visible == true){
-        console.log("COLISION CON BOTIQUIN");
-        obj.parent.visible = false;
-      }
+    for(let i = 0; i < this.impactados.length; i++){
+      if(this.impactados[i].length > 0){
+        var obj = this.impactados[i][0].object;
+        if(obj.parent.userData == "botiquin" && obj.parent.visible == true){
+          console.log("COLISION CON BOTIQUIN");
+          obj.parent.visible = false;
+        }
 
-      if(obj.parent.userData == "estrella" && obj.parent.visible == true){
-        console.log("COLISION CON ESTRELLA");
-        obj.parent.visible = false;
-      }
-    }
-
-    if(impactados4.length > 0){
-      var obj = impactados4[0].object;
-      if(obj.parent.userData == "botiquin" && obj.parent.visible == true){
-        console.log("COLISION CON BOTIQUIN");
-        obj.parent.visible = false;
-      }
-
-      if(obj.parent.userData == "estrella" && obj.parent.visible == true){
-        console.log("COLISION CON ESTRELLA");
-        obj.parent.visible = false;
+        if(obj.parent.userData == "estrella"){
+          obj= obj.parent.parent.parent.parent.parent;
+          this.remove(obj);
+        }
       }
     }
-
-    if(impactados5.length > 0){
-      var obj = impactados5[0].object;
-      if(obj.parent.userData == "botiquin" && obj.parent.visible == true){
-        console.log("COLISION CON BOTIQUIN");
-        obj.parent.visible = false;
-      }
-
-      if(obj.parent.userData == "estrella" && obj.parent.visible == true){
-        console.log("COLISION CON ESTRELLA");
-        obj.parent.visible = false;
-      }
-    }
-
-    if(impactados6.length > 0){
-      var obj = impactados6[0].object;
-      if(obj.parent.userData == "botiquin" && obj.parent.visible == true){
-        console.log("COLISION CON BOTIQUIN");
-        obj.parent.visible = false;
-      }
-
-      if(obj.parent.userData == "estrella" && obj.parent.visible == true){
-        console.log("COLISION CON ESTRELLA");
-        obj.parent.visible = false;
-      }
-    }
-
-    if(impactados7.length > 0){
-      var obj = impactados7[0].object;
-      if(obj.parent.userData == "botiquin" && obj.parent.visible == true){
-        console.log("COLISION CON BOTIQUIN");
-        obj.parent.visible = false;
-      }
-
-      if(obj.parent.userData == "estrella" && obj.parent.visible == true){
-        console.log("COLISION CON ESTRELLA");
-        obj.parent.visible = false;
-      }
-    }
-
     
   }
 
   updateRayos() {
+    let posiciones = [];
     var posicion  = new THREE.Vector3();
     this.tanque.nodoTranslacionY.getWorldPosition(posicion);
+    posiciones.push(posicion);
 
     var direccion = new THREE.Vector3(0,0,0);
     this.tanque.nodoPosOrientTubo.getWorldDirection(direccion);
 
     var posicionPrimerRayo = posicion.clone();
     posicionPrimerRayo.y -= 1;
-    this.rayo.set(posicionPrimerRayo, direccion);
+    posiciones.push(posicionPrimerRayo);
 
 
     var posicionSegundoRayo = posicion.clone();
     posicionSegundoRayo.y -= 2;
     posicionSegundoRayo.x += 1;
-    this.rayo2.set(posicionSegundoRayo, direccion);
+    posiciones.push(posicionSegundoRayo);
 
 
     var posicionTercerRayo = posicion.clone();
     posicionTercerRayo.y -= 2;
     posicionTercerRayo.x -= 1;
-    this.rayo3.set(posicionTercerRayo, direccion);
+    posiciones.push(posicionTercerRayo);
  
 
     var posicionCuartoRayo = posicion.clone();
     posicionCuartoRayo.y += 0.2;
     posicionCuartoRayo.x += 1;
-    this.rayo4.set(posicionCuartoRayo, direccion);
-
+    posiciones.push(posicionCuartoRayo);
 
     var posicionQuintoRayo = posicion.clone();
     posicionQuintoRayo.y += 0.1;
     posicionQuintoRayo.x -= 1;
-    this.rayo5.set(posicionQuintoRayo, direccion);
+    posiciones.push(posicionQuintoRayo);
 
 
     var posicionSextoRayo = posicion.clone();
     posicionSextoRayo.y += 0.1;
-    this.rayo6.set(posicionSextoRayo, direccion);
+    posiciones.push(posicionSextoRayo);
 
 
     var posicionSeptimoRayo = posicion.clone();
     posicionSeptimoRayo.y -= 2;
-    this.rayo7.set(posicionSeptimoRayo, direccion);
+    posiciones.push(posicionSeptimoRayo);
 
-    var impactados = this.rayo.intersectObjects(this.candidatos, true);
-    var impactados2 = this.rayo2.intersectObjects(this.candidatos, true);
-    var impactados3 = this.rayo3.intersectObjects(this.candidatos, true);
-    var impactados4 = this.rayo4.intersectObjects(this.candidatos, true);
-    var impactados5 = this.rayo5.intersectObjects(this.candidatos, true);
-    var impactados6 = this.rayo6.intersectObjects(this.candidatos, true);
-    var impactados7 = this.rayo7.intersectObjects(this.candidatos, true);
-
-    if(impactados.length > 0){
-      var obj = impactados[0].object;
-      if(obj.parent.userData == "botiquin" && obj.parent.visible == true){
-        console.log("COLISION CON BOTIQUIN");
-        obj.parent.visible = false;
-      }
-
-      if(obj.parent.userData == "estrella" && obj.parent.visible == true){
-        console.log("COLISION CON ESTRELLA");
-        obj.parent.visible = false;
-      }
+    for(let i = 0; i < posiciones.length; i++){
+      this.rayos[i].set(posiciones[i], direccion);
     }
 
-    if(impactados2.length > 0){
-      var obj = impactados2[0].object;
-      if(obj.parent.userData == "botiquin" && obj.parent.visible == true){
-        console.log("COLISION CON BOTIQUIN");
-        obj.parent.visible = false;
-      }
+    this.impactados = [];
 
-      if(obj.parent.userData == "estrella" && obj.parent.visible == true){
-        console.log("COLISION CON ESTRELLA");
-        obj.parent.visible = false;
-      }
+    for(let i = 0; i < this.rayos.length; i++){
+      this.impactados.push(this.rayos[i].intersectObjects(this.candidatos, true));
     }
 
-    if(impactados3.length > 0){
-      var obj = impactados3[0].object;
-      if(obj.parent.userData == "botiquin" && obj.parent.visible == true){
-        console.log("COLISION CON BOTIQUIN");
-        obj.parent.visible = false;
-      }
+    for(let i = 0; i < this.impactados.length; i++){
+      if(this.impactados[i].length > 0){
+        var obj = this.impactados[i][0].object;
+        if(obj.parent.userData == "botiquin" && obj.parent.visible == true){
+          console.log("COLISION CON BOTIQUIN");
+          obj.parent.visible = false;
+        }
 
-      if(obj.parent.userData == "estrella" && obj.parent.visible == true){
-        console.log("COLISION CON ESTRELLA");
-        obj.parent.visible = false;
-      }
-    }
-
-    if(impactados4.length > 0){
-      var obj = impactados4[0].object;
-      if(obj.parent.userData == "botiquin" && obj.parent.visible == true){
-        console.log("COLISION CON BOTIQUIN");
-        obj.parent.visible = false;
-      }
-
-      if(obj.parent.userData == "estrella" && obj.parent.visible == true){
-        console.log("COLISION CON ESTRELLA");
-        obj.parent.visible = false;
-      }
-    }
-
-    if(impactados5.length > 0){
-      var obj = impactados5[0].object;
-      if(obj.parent.userData == "botiquin" && obj.parent.visible == true){
-        console.log("COLISION CON BOTIQUIN");
-        obj.parent.visible = false;
-      }
-
-      if(obj.parent.userData == "estrella" && obj.parent.visible == true){
-        console.log("COLISION CON ESTRELLA");
-        obj.parent.visible = false;
-      }
-    }
-
-    if(impactados6.length > 0){
-      var obj = impactados6[0].object;
-      if(obj.parent.userData == "botiquin" && obj.parent.visible == true){
-        console.log("COLISION CON BOTIQUIN");
-        obj.parent.visible = false;
-      }
-
-      if(obj.parent.userData == "estrella" && obj.parent.visible == true){
-        console.log("COLISION CON ESTRELLA");
-        obj.parent.visible = false;
-      }
-    }
-
-    if(impactados7.length > 0){
-      var obj = impactados7[0].object;
-      if(obj.parent.userData == "botiquin" && obj.parent.visible == true){
-        console.log("COLISION CON BOTIQUIN");
-        obj.parent.visible = false;
-      }
-
-      if(obj.parent.userData == "estrella" && obj.parent.visible == true){
-        console.log("COLISION CON ESTRELLA");
-        obj.parent.visible = false;
+        if(obj.parent.userData == "estrella"){
+          obj = obj.parent.parent.parent.parent.parent;
+          this.remove(obj);
+        }
       }
     }
 }

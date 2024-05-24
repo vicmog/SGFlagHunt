@@ -110,6 +110,14 @@ class Botiquin extends THREE.Object3D{
 
         this.nodoPos = this.asignarPos(geometriaTubo, t);
         this.add(this.nodoPos);
+
+        this.castShadow = true;
+        this.receiveShadow = true;
+
+        /*this.traverseVisible((unNodo) => {
+            unNodo.castShadow = true;
+            unNodo.receiveShadow = true;
+        });*/
         
 
     }
