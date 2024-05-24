@@ -17,7 +17,7 @@ class Tubo extends THREE.Object3D {
         const material = new THREE.MeshStandardMaterial({
             map: texturaColor,
             bumpMap: textureBump,
-            bumpScale: 0.2,
+            bumpScale: 0.8,
             normalMap: texturaNormal,
             roughnessMap: texturaRoughness,
             aoMap: texturaAmbientOcclusion,

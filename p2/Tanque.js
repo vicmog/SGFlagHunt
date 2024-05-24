@@ -21,7 +21,7 @@ class Tanque extends THREE.Object3D {
         const material2 = new THREE.MeshStandardMaterial({ 
             color: 0x000000, 
         });
-        material.map.needsUpdate = true;
+        //material.map.needsUpdate = true;
 
         this.tubo = geometriaTubo;
         this.path = geometriaTubo.parameters.path;
@@ -142,7 +142,7 @@ class Tanque extends THREE.Object3D {
         this.luz.shadow.camera.near = 0.5;
         this.luz.shadow.camera.far = 500;
         this.luz.shadow.camera.fov = 30;
-        
+
         this.nodoTranslacionY.add(this.luz);
 
 

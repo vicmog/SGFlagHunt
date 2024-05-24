@@ -12,7 +12,7 @@ import { Luna } from './Luna.js';
 import { Botiquin } from './Botiquin.js';
 import { Misil } from './Misil.js';
 import { Estrella } from './Estrella.js'
-import { Dron } from '../objetosP2/Dron.js'
+import { Dron } from './Dron.js'
 
  
 /// La clase fachada del modelo
@@ -174,7 +174,7 @@ class MyScene extends THREE.Scene {
     // La luz ambiental solo tiene un color y una intensidad
     // Se declara como   var   y va a ser una variable local a este método
     //    se hace así puesto que no va a ser accedida desde otros métodos
-    const ambientLight = new THREE.AmbientLight(0xffffff,0.15);
+    const ambientLight = new THREE.AmbientLight(0xffffff,0.2);
     // Sombra
     this.add(ambientLight);
 
@@ -216,7 +216,7 @@ class MyScene extends THREE.Scene {
     var renderer = new THREE.WebGLRenderer();
     
     // Se establece un color de fondo en las imágenes que genera el render
-    renderer.setClearColor(new THREE.Color(0xffffff), 1.0);
+    renderer.setClearColor(new THREE.Color(0x000000), 1.0);
     
     // Se establece el tamaño, se aprovecha la totalidad de la ventana del navegador
     renderer.setSize(window.innerWidth, window.innerHeight);
