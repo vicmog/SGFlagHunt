@@ -106,6 +106,16 @@ class MyScene extends THREE.Scene {
     this.add(this.luna);
     this.add(this.tanque);
     this.add(this.tubo);
+
+    this.score = 0;
+    this.maxLife = 100;
+    this.currentLife = this.maxLife;
+  }
+
+  updateLifeBar() {
+    const lifeBar = document.getElementById('lifeBar');
+    const lifePercentage = (this.currentLife / this.maxLife) * 100;
+    lifeBar.style.width = lifePercentage + '%';
   }
   
   createCamera () {
@@ -177,24 +187,6 @@ class MyScene extends THREE.Scene {
     const ambientLight = new THREE.AmbientLight(0xffffff,0.2);
     // Sombra
     this.add(ambientLight);
-
-
-    /*const pointLight = new THREE.PointLight(0xff0000, 1);
-    pointLight.position.set(5, 5, 5);
-    this.add(pointLight);
-
-    this.ambientLight = new THREE.AmbientLight('white', this.guiControls.ambientIntensity);
-    // La añadimos a la escena
-    this.add (this.ambientLight);
-    
-    // Se crea una luz focal que va a ser la luz principal de la escena
-    // La luz focal, además tiene una posición, y un punto de mira
-    // Si no se le da punto de mira, apuntará al (0,0,0) en coordenadas del mundo
-    // En este caso se declara como   this.atributo   para que sea un atributo accesible desde otros métodos.
-    this.pointLight = new THREE.SpotLight( 0xffffff );
-    this.pointLight.power = this.guiControls.lightPower;
-    this.pointLight.position.set( 2, 3, 1 );
-    this.add (this.pointLight);*/
   }
   
   setLightPower (valor) {
@@ -319,8 +311,10 @@ class MyScene extends THREE.Scene {
         }
 
         if(obj.parent.userData == "estrella"){
-          obj= obj.parent.parent.parent.parent.parent;
+          obj = obj.parent.parent.parent.parent.parent;
           this.remove(obj);
+          this.currentLife -= 10;
+          this.updateLifeBar();
         }
       }
     }
@@ -387,16 +381,33 @@ class MyScene extends THREE.Scene {
       if(this.impactados[i].length > 0){
         var obj = this.impactados[i][0].object;
         if(obj.parent.userData == "botiquin" && obj.parent.visible == true){
-          console.log("COLISION CON BOTIQUIN");
-          obj.parent.visible = false;
-        }
-
-        if(obj.parent.userData == "estrella"){
           obj = obj.parent.parent.parent.parent.parent;
           this.remove(obj);
+          if(this.currentLife < this.maxLife){
+            this.currentLife += 10;
+            if(this.currentLife > this.maxLife){
+              this.currentLife = this.maxLife;
+            }
+            this.updateLifeBar();
+          }
+        }else if(obj.parent.userData == "estrella"){
+          console.log("COLISION CON ESTRELLA");
+          obj = obj.parent.parent.parent.parent.parent;
+          this.remove(obj);
+          this.currentLife -= 10;
+          this.updateLifeBar();
+          this.showGameOver();
+          break;
         }
       }
     }
+}
+
+
+showGameOver() {
+  this.remove(this.tanque);
+  this.remove(this.tubo);
+  document.getElementById('gameOver').style.display = 'flex';
 }
 
 
@@ -467,8 +478,7 @@ class MyScene extends THREE.Scene {
     this.estrella.update();
     this.estrella2.update();
     this.estrella3.update();
-     // Colisiones
-     //this.createRayos();
+
 
     // Este método debe ser llamado cada vez que queramos visualizar la escena de nuevo.
     // Literalmente le decimos al navegador: "La próxima vez que haya que refrescar la pantalla, llama al método que te indico".
