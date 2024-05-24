@@ -62,17 +62,7 @@ class MyScene extends THREE.Scene {
     // Mover la luna
     this.luna.position.set(-100, 100, 10);
 
-    this.botiquin = new Botiquin(this.tubo.getTubeGeometry(), 0.1);
-    this.botiquin2 = new Botiquin(this.tubo.getTubeGeometry(), 0.2);
-    this.botiquin3 = new Botiquin(this.tubo.getTubeGeometry(), 0.5);
-    this.botiquin4 = new Botiquin(this.tubo.getTubeGeometry(), 0.7);    
-    this.botiquin5 = new Botiquin(this.tubo.getTubeGeometry(), 0.9);
-
-    this.estrella = new Estrella(this.tubo.getTubeGeometry(), 0.3);
-    this.estrella2 = new Estrella(this.tubo.getTubeGeometry(), 0.6);
-    this.estrella3 = new Estrella(this.tubo.getTubeGeometry(), 0.8);
-
-    this.candidatos = [this.botiquin, this.botiquin2, this.botiquin3, this.botiquin4, this.botiquin5, this.estrella, this.estrella2, this.estrella3];
+    this.candidatos = [];
 
 
 
@@ -85,17 +75,8 @@ class MyScene extends THREE.Scene {
     // PICKING
     this.raton = new THREE.Vector2();
     this.raycasterRaton = new THREE.Raycaster();
-    
-    this.add(this.botiquin);
-    this.add(this.botiquin2);
-    this.add(this.botiquin3);
-    this.add(this.botiquin4);
-    this.add(this.botiquin5);
-
-    this.add(this.estrella);
-    this.add(this.estrella2);
-    this.add(this.estrella3);
-
+  
+    this.addObjetos();
 
     this.add(this.misil);
     this.add(this.misil2);
@@ -110,12 +91,18 @@ class MyScene extends THREE.Scene {
     this.score = 0;
     this.maxLife = 100;
     this.currentLife = this.maxLife;
+
   }
 
   updateLifeBar() {
     const lifeBar = document.getElementById('lifeBar');
     const lifePercentage = (this.currentLife / this.maxLife) * 100;
     lifeBar.style.width = lifePercentage + '%';
+  }
+
+  updatePuntuacion(score) {
+    this.score += score;
+    document.getElementById('score').innerText = 'Puntuacion: ' + this.score;
   }
   
   createCamera () {
@@ -306,7 +293,6 @@ class MyScene extends THREE.Scene {
       if(this.impactados[i].length > 0){
         var obj = this.impactados[i][0].object;
         if(obj.parent.userData == "botiquin" && obj.parent.visible == true){
-          console.log("COLISION CON BOTIQUIN");
           obj.parent.visible = false;
         }
 
@@ -320,6 +306,7 @@ class MyScene extends THREE.Scene {
     }
     
   }
+  
 
   updateRayos() {
     let posiciones = [];
@@ -380,7 +367,10 @@ class MyScene extends THREE.Scene {
     for(let i = 0; i < this.impactados.length; i++){
       if(this.impactados[i].length > 0){
         var obj = this.impactados[i][0].object;
+
         if(obj.parent.userData == "botiquin" && obj.parent.visible == true){
+          console.log("COLISION CON BOTIQUIN");
+          obj.parent.visible = false;
           obj = obj.parent.parent.parent.parent.parent;
           this.remove(obj);
           if(this.currentLife < this.maxLife){
@@ -390,25 +380,91 @@ class MyScene extends THREE.Scene {
             }
             this.updateLifeBar();
           }
-        }else if(obj.parent.userData == "estrella"){
+        }else if(obj.parent.userData == "estrella" && obj.parent.visible == true){
           console.log("COLISION CON ESTRELLA");
+          obj.parent.visible = false;
           obj = obj.parent.parent.parent.parent.parent;
           this.remove(obj);
           this.currentLife -= 10;
           this.updateLifeBar();
-          this.showGameOver();
-          break;
+          this.updatePuntuacion(10);
+          
+        }else if(obj.parent.userData == "bomba" && obj.parent.visible == true){
+          obj.parent.visible = false;
+          obj = obj.parent.parent.parent.parent.parent;
+          this.remove(obj);
+          this.currentLife -= 10;
+          
+          if(this.currentLife <= 0){
+            this.currentLife = 0;
+            this.updateLifeBar();
+            this.showGameOver();
+          }
+
+          this.updateLifeBar();
+        }else if(obj.parent.userData == "bandera" && obj.parent.visible == true){
+          obj.parent.visible = false;
+          obj = obj.parent.parent.parent.parent.parent;
+          this.remove(obj);
+          this.score += 10;
+          this.updatePuntuacion(10);
         }
       }
     }
 }
 
+  addObjetos(){
 
-showGameOver() {
-  this.remove(this.tanque);
-  this.remove(this.tubo);
-  document.getElementById('gameOver').style.display = 'flex';
-}
+    //Numero aleatorio entre 0 y 1
+    let nAleatorio = Math.random();
+
+    this.botiquin = new Botiquin(this.tubo.getTubeGeometry(), nAleatorio);
+    nAleatorio = Math.random();
+    this.botiquin2 = new Botiquin(this.tubo.getTubeGeometry(), nAleatorio);
+    nAleatorio = Math.random();
+    this.botiquin3 = new Botiquin(this.tubo.getTubeGeometry(), nAleatorio);
+    nAleatorio = Math.random();
+    this.botiquin4 = new Botiquin(this.tubo.getTubeGeometry(), nAleatorio);
+    nAleatorio = Math.random();   
+    this.botiquin5 = new Botiquin(this.tubo.getTubeGeometry(), nAleatorio);
+
+    nAleatorio = Math.random();
+    this.estrella = new Estrella(this.tubo.getTubeGeometry(), nAleatorio);
+
+    nAleatorio = Math.random();
+    this.estrella2 = new Estrella(this.tubo.getTubeGeometry(), nAleatorio);
+
+    nAleatorio = Math.random();
+    this.estrella3 = new Estrella(this.tubo.getTubeGeometry(), nAleatorio);
+
+    this.candidatos.push(this.botiquin);
+    this.candidatos.push(this.botiquin2);
+    this.candidatos.push(this.botiquin3);
+    this.candidatos.push(this.botiquin4);
+    this.candidatos.push(this.botiquin5);
+    this.candidatos.push(this.estrella);
+    this.candidatos.push(this.estrella2);
+    this.candidatos.push(this.estrella3);
+
+
+    this.add(this.botiquin);
+    this.add(this.botiquin2);
+    this.add(this.botiquin3);
+    this.add(this.botiquin4);
+    this.add(this.botiquin5);
+
+    this.add(this.estrella);
+    this.add(this.estrella2);
+    this.add(this.estrella3);
+  }
+
+
+  showGameOver() {
+    this.tanque.pararAnimacion();
+    document.getElementById('finalScore').innerText = 'Puntuacion final: ' + this.score;
+    document.getElementById('gameOver').style.display = 'flex';
+  }
+
 
 
   // Funcion para el picking

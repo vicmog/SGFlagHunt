@@ -10,6 +10,11 @@
     <script type="importmap">
           { "imports": { "three": "../libs/three.module.js" } }
     </script>
+    <script>
+        function restartGame() {
+            location.reload();
+        }
+    </script>
     
     <script type="module" src="./MyScene.js"></script>    
     <style>
@@ -49,6 +54,7 @@
             display: none;
             position: fixed;
             top: 0;
+            flex-direction: column;
             left: 0;
             width: 100%;
             height: 100%;
@@ -61,7 +67,26 @@
         }
         .hidden {
             display: none;
-        }   
+        }  
+
+        #finalScore {
+            margin-bottom: 20px; /* Espacio entre el texto y el botón */
+        }
+
+        #restartButton {
+            padding: 10px 20px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1em;
+            transition: background-color 0.3s;
+        }
+
+        #restartButton:hover {
+            background-color: #45a049;
+        }
     </style>
 </head>
 <body>
@@ -74,7 +99,12 @@
         </div>
         <div id="score">Puntuacion: 0</div>
     </div>
-    <div id="gameOver" class="hidden">Game Over</div>
+    <div id="gameOver">
+        <div>¡Juego terminado!</div>
+        <div id="finalScore">Puntuacion final: 0</div>
+        <button id="restartButton" onclick="restartGame()">Reiniciar Juego</button>
+    </div>
+
 </div>
 </body>
 </html>

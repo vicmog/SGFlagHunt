@@ -171,7 +171,7 @@ class Tanque extends THREE.Object3D {
         this.add(this.nodoPosOrientTubo);
 
         this.tiempo = 50000;
-        var animacion = new TWEEN.Tween(this.origen).to(this.destino, this.tiempo)
+        this.animacion = new TWEEN.Tween(this.origen).to(this.destino, this.tiempo)
             .onUpdate(() => {
                 var posicion = this.path.getPointAt(this.origen.t);
                 this.nodoPosOrientTubo.position.copy(posicion);
@@ -188,9 +188,11 @@ class Tanque extends THREE.Object3D {
                     if (this.tiempo < 20000) {
                         this.tiempo = 20000;
                     }
-                    animacion.duration(this.tiempo);
+                    this.animacion.duration(this.tiempo);
                     console.log("Vueltas: " + this.contador_vueltas + " Tiempo: " + this.tiempo);
+                    this.tubo.add
                 }
+
 
             })
             .repeat(Infinity)
@@ -199,6 +201,11 @@ class Tanque extends THREE.Object3D {
         // Animación de rotación de la cabeza del tanque
         this.animacionRotacion();
     }
+
+    pararAnimacion() {
+        this.animacion.stop();
+    }
+
 
     createCamara() {
         this.camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 1000);
