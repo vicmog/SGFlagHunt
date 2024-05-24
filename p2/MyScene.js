@@ -53,7 +53,7 @@ class MyScene extends THREE.Scene {
  
 
     this.tubo = new Tubo();
-    this.tanque = new Tanque(this.tubo.getTubeGeometry());
+    this.tanque = new Tanque(this.tubo.getTubeGeometry(),this);
     this.luna = new Luna();
     this.misil = new Misil(this.tubo.getTubeGeometry(),0,0);
     this.misil2 = new Misil(this.tubo.getTubeGeometry(),0.5,200);

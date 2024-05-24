@@ -5,7 +5,7 @@ import * as TWEEN from '../libs/tween.esm.js';
 
 class Tanque extends THREE.Object3D {
 
-    constructor(geometriaTubo) {
+    constructor(geometriaTubo,escena) {
         super();
 
         var textureLoader = new THREE.TextureLoader();
@@ -190,7 +190,8 @@ class Tanque extends THREE.Object3D {
                     }
                     this.animacion.duration(this.tiempo);
                     console.log("Vueltas: " + this.contador_vueltas + " Tiempo: " + this.tiempo);
-                    this.tubo.add
+                    escena.addObjetos();
+                    
                 }
 
 

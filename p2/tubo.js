@@ -46,51 +46,6 @@ class Tubo extends THREE.Object3D {
 
     }
 
-    addObjetos(){
-
-        //Numero aleatorio entre 0 y 1
-        let nAleatorio = Math.random();
-    
-        this.botiquin = new Botiquin(this.getTubeGeometry(), nAleatorio);
-        nAleatorio = Math.random();
-        this.botiquin2 = new Botiquin(this.getTubeGeometry(), nAleatorio);
-        nAleatorio = Math.random();
-        this.botiquin3 = new Botiquin(this.getTubeGeometry(), nAleatorio);
-        nAleatorio = Math.random();
-        this.botiquin4 = new Botiquin(this.getTubeGeometry(), nAleatorio);
-        nAleatorio = Math.random();   
-        this.botiquin5 = new Botiquin(this.getTubeGeometry(), nAleatorio);
-    
-        nAleatorio = Math.random();
-        this.estrella = new Estrella(this.getTubeGeometry(), nAleatorio);
-    
-        nAleatorio = Math.random();
-        this.estrella2 = new Estrella(this.getTubeGeometry(), nAleatorio);
-    
-        nAleatorio = Math.random();
-        this.estrella3 = new Estrella(this.getTubeGeometry(), nAleatorio);
-    
-        this.candidatos.push(this.botiquin);
-        this.candidatos.push(this.botiquin2);
-        this.candidatos.push(this.botiquin3);
-        this.candidatos.push(this.botiquin4);
-        this.candidatos.push(this.botiquin5);
-        this.candidatos.push(this.estrella);
-        this.candidatos.push(this.estrella2);
-        this.candidatos.push(this.estrella3);
-    
-    
-        this.add(this.botiquin);
-        this.add(this.botiquin2);
-        this.add(this.botiquin3);
-        this.add(this.botiquin4);
-        this.add(this.botiquin5);
-    
-        this.add(this.estrella);
-        this.add(this.estrella2);
-        this.add(this.estrella3);
-      }
-
     getTubeGeometry(){
         return this.tuboGeometry;
     }

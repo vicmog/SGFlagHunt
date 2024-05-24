@@ -84,9 +84,9 @@ class Botiquin extends THREE.Object3D{
         var colorBlanco = new THREE.Color(1,1,1);
         var colorRojo = new THREE.Color(1,0,0);
         var colorNegro = new THREE.Color(0,0,0);
-        var materialCruz = new THREE.MeshBasicMaterial({color: colorBlanco});
-        var materialBotiquin = new THREE.MeshBasicMaterial({color: colorRojo});
-        var materialAsa = new THREE.MeshBasicMaterial({color: colorNegro});
+        var materialCruz = new THREE.MeshStandardMaterial({color: colorBlanco});
+        var materialBotiquin = new THREE.MeshStandardMaterial({color: colorRojo});
+        var materialAsa = new THREE.MeshStandardMaterial({color: colorNegro});
 
         this.cuerpoBotiquin = this.createCuerpo(materialBotiquin);
 
