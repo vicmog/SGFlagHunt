@@ -119,6 +119,15 @@ class Tanque extends THREE.Object3D {
         this.luz.penumbra = 1;
         this.luz.position.set(0,10,0);
         this.luz.target = this.nodoTranslacionY;
+
+        //SOMBRA 
+        this.luz.castShadow = true;
+        this.luz.shadow.mapSize.width = 1024;
+        this.luz.shadow.mapSize.height = 1024;
+        this.luz.shadow.camera.near = 0.5;
+        this.luz.shadow.camera.far = 500;
+        this.luz.shadow.camera.fov = 30;
+        
         this.nodoTranslacionY.add(this.luz);
 
 

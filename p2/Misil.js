@@ -17,8 +17,6 @@ class Misil extends THREE.Object3D{
         this.origen = {t:1};
         this.destino = {t:0};
 
-
-
         this.rotacionMisilSpeed = 0.01;
         
         var material = new THREE.MeshStandardMaterial({
@@ -94,7 +92,7 @@ class Misil extends THREE.Object3D{
 
         this.luzRoja = new THREE.PointLight(0xff0000, 1, 100);
         this.luzRoja.power = 1000;
-        this.luzRoja.position.set(5, 10, 0);
+        this.luzRoja.position.set(5, 5, 0);
         this.nodoTranslacionY.add(this.luzRoja);
 
          //NODO ROTACION Z
