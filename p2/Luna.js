@@ -10,6 +10,7 @@ class Luna extends THREE.Object3D {
         let texture = textureLoader.load('../imgs/textluna.jpg');
         texture.wrapT = THREE.MirroredRepeatWrapping;
         texture.wrapS = THREE.MirroredRepeatWrapping;
+        texture.repeat.set(1, 1);  // Ajusta la repetición según sea necesario
         // Crear un material básico con la textura
         let material = new THREE.MeshBasicMaterial({ map: texture });
         
