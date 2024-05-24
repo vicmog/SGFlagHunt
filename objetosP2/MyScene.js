@@ -9,7 +9,7 @@ import { Dron } from './Dron.js'
 import { Tanque } from './Tanque.js';
 import { Estrella } from './Estrella.js'
 import { Luna } from './Luna.js'
- 
+import { MuroBasico } from './MuroBasico.js';
 /// La clase fachada del modelo
 /**
  * Usaremos una clase derivada de la clase Scene de Three.js para llevar el control de la escena y de todo lo que ocurre en ella.
@@ -46,8 +46,9 @@ class MyScene extends THREE.Scene {
     //this.tanque = new Tanque();
     //this.add(this.tanque);
     this.estrella = new Estrella();
-    this.add(this.estrella);
-
+    //this.add(this.estrella);
+    this.muro = new MuroBasico();
+    this.add(this.muro);
     this.luna = new Luna();
     //this.add(this.luna);
   }

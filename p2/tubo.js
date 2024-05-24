@@ -14,6 +14,8 @@ class Tubo extends THREE.Object3D {
         var texturaAmbientOcclusion = textureLoader.load('../imgs/texturatubo/Rock051_1K-JPG_AmbientOcclusion.jpg');
         var texturaMetalness = textureLoader.load('../imgs/texturatubo/Rock051_1K-JPG_Metalness.jpg');
 
+        texturaColor.wrapS = texturaColor.wrapT = THREE.RepeatWrapping;
+        texturaColor.repeat.set(20, 2); // Ajusta la repetición según sea necesario
         const material = new THREE.MeshStandardMaterial({
             map: texturaColor,
             bumpMap: textureBump,
@@ -24,6 +26,7 @@ class Tubo extends THREE.Object3D {
             metalnessMap: texturaMetalness
         });
 
+        
         const radius = 60;
         const tube = 5;
         const tubularSegments = 300;
