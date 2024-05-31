@@ -6,12 +6,8 @@ import * as THREE from '../libs/three.module.js'
 import { GUI } from '../libs/dat.gui.module.js'
 import { TrackballControls } from '../libs/TrackballControls.js'
 
-// Clases de mi proyecto
-import { Barrido } from './Barrido.js';
-import { Shape } from './Shape.js';
+import { Bandera } from './Bandera.js';
 
-
- 
 /// La clase fachada del modelo
 /**
  * Usaremos una clase derivada de la clase Scene de Three.js para llevar el control de la escena y de todo lo que ocurre en ella.
@@ -43,46 +39,11 @@ class MyScene extends THREE.Scene {
     
     // Y unos ejes. Imprescindibles para orientarnos sobre dónde están las cosas
     // Todas las unidades están en metros
-    this.axis = new THREE.AxesHelper (0.1);
+    this.axis = new THREE.AxesHelper (10);
     this.add (this.axis);
-    
-    
-    // Por último creamos el modelo.
-    // El modelo puede incluir su parte de la interfaz gráfica de usuario. Le pasamos la referencia a 
-    // la gui y el texto bajo el que se agruparán los controles de la interfaz que añada el modelo.
 
-  
-
-    
-    const shape = new THREE.Shape();
-
-    /*shape.moveTo( 0,0 );
-    shape.lineTo( 0, 0.05 );
-    shape.lineTo( 0.05, 0.05 );
-    shape.lineTo( 0.05, 0 );
-    shape.lineTo( 0, 0 );*/
-
-    //mi figura
-    shape.moveTo( 0 ,0.0111);
-    shape.lineTo(0.1, 0.1);
-    shape.quadraticCurveTo(0.22,0.2 ,0.1, 0.3);
-    shape.lineTo(0, 0.3999);
-    
-    var path = new THREE.CatmullRomCurve3([
-      new THREE.Vector3( 0, 0, 0 ),
-      new THREE.Vector3( 0, 0.1, 0 ),
-      new THREE.Vector3( 0.05, 0.15, 0 ),
-      new THREE.Vector3( 0.1, 0.2, 0 ),
-    ]) ;
-
-
-    this.shape = new Shape(shape);
-    //this.add(this.shape);
-
-    this.objetoBarrido = new Barrido(this.gui,'Objeto de Barrido',shape,path);
-    this.add(this.objetoBarrido);
-
-
+    this.bandera = new Bandera('../imgs/spain.svg');
+    this.add(this.bandera);
 
   }
   
@@ -91,9 +52,9 @@ class MyScene extends THREE.Scene {
     //   El ángulo del campo de visión vértical en grados sexagesimales
     //   La razón de aspecto ancho/alto
     //   Los planos de recorte cercano y lejano
-    this.camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.01, 10);
+    this.camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 1000);
     // También se indica dónde se coloca
-    this.camera.position.set (0.2, 0.05, 0.2);
+    this.camera.position.set (20, 10, 20);
     // Y hacia dónde mira
     var look = new THREE.Vector3 (0,0,0);
     this.camera.lookAt(look);
@@ -181,7 +142,7 @@ class MyScene extends THREE.Scene {
     // En este caso se declara como   this.atributo   para que sea un atributo accesible desde otros métodos.
     this.pointLight = new THREE.SpotLight( 0xffffff );
     this.pointLight.power = this.guiControls.lightPower;
-    this.pointLight.position.set( 2, 3, 1 );
+    this.pointLight.position.set( 2, 7, 5 );
     this.add (this.pointLight);
   }
   
@@ -242,15 +203,10 @@ class MyScene extends THREE.Scene {
     // Le decimos al renderizador "visualiza la escena que te indico usando la cámara que te estoy pasando"
     this.renderer.render (this, this.getCamera());
 
+    this.bandera.update();
     // Se actualiza la posición de la cámara según su controlador
     this.cameraControl.update();
-    
-    // Se actualiza el resto del modelo
-    this.objetoBarrido.update();
-    
-    // Este método debe ser llamado cada vez que queramos visualizar la escena de nuevo.
-    // Literalmente le decimos al navegador: "La próxima vez que haya que refrescar la pantalla, llama al método que te indico".
-    // Si no existiera esta línea,  update()  se ejecutaría solo la primera vez.
+   
     requestAnimationFrame(() => this.update())
   }
 }

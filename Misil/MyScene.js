@@ -6,12 +6,8 @@ import * as THREE from '../libs/three.module.js'
 import { GUI } from '../libs/dat.gui.module.js'
 import { TrackballControls } from '../libs/TrackballControls.js'
 
-// Clases de mi proyecto
-import { ObjetoRevolucion } from './ObjetoRevolucion.js';
-import { Shape } from './Shape.js';
+import { Misil } from './Misil.js';
 
-
- 
 /// La clase fachada del modelo
 /**
  * Usaremos una clase derivada de la clase Scene de Three.js para llevar el control de la escena y de todo lo que ocurre en ella.
@@ -43,48 +39,12 @@ class MyScene extends THREE.Scene {
     
     // Y unos ejes. Imprescindibles para orientarnos sobre dónde están las cosas
     // Todas las unidades están en metros
-    this.axis = new THREE.AxesHelper (0.1);
+    this.axis = new THREE.AxesHelper (10);
     this.add (this.axis);
-    
-    
-    // Por último creamos el modelo.
-    // El modelo puede incluir su parte de la interfaz gráfica de usuario. Le pasamos la referencia a 
-    // la gui y el texto bajo el que se agruparán los controles de la interfaz que añada el modelo.
-    var points = [
-      new THREE.Vector2(0.00001, -0.015), // Punto inicial en la base del cuenco
-      new THREE.Vector2(0.01, -0.0145),
-      new THREE.Vector2(0.01, -0.011),
-      new THREE.Vector2(0.005, -0.007),
-      new THREE.Vector2(0.004, -0.004),
-      new THREE.Vector2(0.004, 0.005), // Punto más alto del cuenco
-      new THREE.Vector2(0.005, 0.006),
-      new THREE.Vector2(0.003, 0.006),
-      new THREE.Vector2(0.005, 0.008),
-      new THREE.Vector2(0.0055, 0.01),
-      new THREE.Vector2(0.005, 0.012),
-      new THREE.Vector2(0.003, 0.0145),
-      new THREE.Vector2(0.00001, 0.015) // Punto final en el borde del cuenco
-  ];
-  
-  
 
-    
-    const shape = new THREE.Shape();
-    
-    shape.moveTo( 0 ,0.0111);
-    shape.lineTo(0.1, 0.1);
-    shape.quadraticCurveTo(0.22,0.2 ,0.1, 0.3);
-    shape.lineTo(0, 0.3999);
-    
-    
-    this.shape = new Shape(shape);
-    //this.add(this.shape);
+    this.misil = new Misil();
+    this.add(this.misil);
 
-    this.objetoRevolucion = new ObjetoRevolucion(this.gui,'Objeto de revolución',shape);
-    this.add(this.objetoRevolucion);
-
-    
-    //this.add(this.shape);
   }
   
   createCamera () {
@@ -92,9 +52,9 @@ class MyScene extends THREE.Scene {
     //   El ángulo del campo de visión vértical en grados sexagesimales
     //   La razón de aspecto ancho/alto
     //   Los planos de recorte cercano y lejano
-    this.camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.01, 10);
+    this.camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 1000);
     // También se indica dónde se coloca
-    this.camera.position.set (0.2, 0.05, 0.2);
+    this.camera.position.set (20, 10, 20);
     // Y hacia dónde mira
     var look = new THREE.Vector3 (0,0,0);
     this.camera.lookAt(look);
@@ -243,15 +203,10 @@ class MyScene extends THREE.Scene {
     // Le decimos al renderizador "visualiza la escena que te indico usando la cámara que te estoy pasando"
     this.renderer.render (this, this.getCamera());
 
+    this.misil.update();
     // Se actualiza la posición de la cámara según su controlador
     this.cameraControl.update();
-    
-    // Se actualiza el resto del modelo
-    this.objetoRevolucion.update();
-    
-    // Este método debe ser llamado cada vez que queramos visualizar la escena de nuevo.
-    // Literalmente le decimos al navegador: "La próxima vez que haya que refrescar la pantalla, llama al método que te indico".
-    // Si no existiera esta línea,  update()  se ejecutaría solo la primera vez.
+   
     requestAnimationFrame(() => this.update())
   }
 }

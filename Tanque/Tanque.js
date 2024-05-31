@@ -1,11 +1,9 @@
 import * as THREE from 'three';
-import {CSG} from '../libs/CSG-v2.js';
-import { Tubo } from '../p2/tubo.js';
 import * as TWEEN from '../libs/tween.esm.js';
 
 class Tanque extends THREE.Object3D {
 
-    constructor(geometriaTubo,escena) {
+    constructor() {
         super();
 
         //MATERIALES Y LUCES
@@ -14,26 +12,16 @@ class Tanque extends THREE.Object3D {
         texturaColor.wrapS = THREE.RepeatWrapping;
         texturaColor.wrapT = THREE.RepeatWrapping;
         texturaColor.repeat.set(2, 2);
+
         const material = new THREE.MeshStandardMaterial({
             map: texturaColor,
             roughness: 0.2,
             metalness: 0.6,
         });
+
         const material2 = new THREE.MeshStandardMaterial({ 
             color: 0x000000, 
         });
-
-        
-        //VARIABLES DEL TANQUE 
-        this.tubo = geometriaTubo;
-        this.path = geometriaTubo.parameters.path;
-        this.radio = geometriaTubo.parameters.radius;
-        this.segmentos = geometriaTubo.parameters.tubularSegments;
-        this.t = 0;
-        this.alfa = 0;
-        this.contador_vueltas = 0;
-
-        this.camera = null;
 
         this.rotacionMinimaCanion = -Math.PI /200; 
         this.rotacionMaximaCanion = Math.PI / 200;
@@ -45,11 +33,7 @@ class Tanque extends THREE.Object3D {
         this.rotacionMaxima = Math.PI / 5; 
         this.duracionRotacion = 2000; 
 
-        this.origen = { t: 0 };
-        this.destino = { t: 1 };
-
-
-        // GEOMETRIA DEL TANQUE
+        //Geometria del tanque
         var cuerpoRuedasGeometria = new THREE.CylinderGeometry(2, 2, 10, 64);
         cuerpoRuedasGeometria.rotateX(Math.PI / 2);
         cuerpoRuedasGeometria.scale(3, 0.5, 1);
@@ -71,6 +55,7 @@ class Tanque extends THREE.Object3D {
         cuerpoRecubrimentoCanionTanqueGeometria.rotateY(Math.PI / 2);
         cuerpoRecubrimentoCanionTanqueGeometria.translate(-3.3, 2.7, 0);
 
+       
         var cuerpoCupulaTanqueGeometria = new THREE.SphereGeometry(1, 32, 32);
         cuerpoCupulaTanqueGeometria.scale(1, 0.5, 1);
         cuerpoCupulaTanqueGeometria.translate(0, 3.5, 0);
@@ -78,11 +63,10 @@ class Tanque extends THREE.Object3D {
         var cuerpoRuedaGeometria = new THREE.CylinderGeometry(0.75, 0.75, 10.5, 64);
         cuerpoRuedaGeometria.rotateX(Math.PI / 2);
 
+        // Declaraciond de los Mesh
 
-        //DECLARACION DE MESH
         this.cuerpoTanque = new THREE.Mesh(cuerpoRuedasGeometria, material);
         this.cuerpoSoporte = new THREE.Mesh(cuerpoSoporteGeometria, material);
-
         this.cuerpoMiraTanque = new THREE.Mesh(cuerpoMiraTanqueGeometria, material);
         this.cuerpoCanionTanque = new THREE.Mesh(cuerpoCanionTanqueGeometria, material);
         this.cuerpoRecubrimentoCanionTanque = new THREE.Mesh(cuerpoRecubrimentoCanionTanqueGeometria, material);
@@ -97,16 +81,13 @@ class Tanque extends THREE.Object3D {
         this.cuerpoRueda5 = new THREE.Mesh(cuerpoRuedaGeometria, material2);
         this.cuerpoRueda5.position.x = 3.7;
 
-
-        //NODO RORACION CAÑON ANIMACION
+        //Nodo Animacion Cañon
         this.canionAnimacion = new THREE.Object3D();
         this.canionAnimacion.add(this.cuerpoCanionTanque);
         this.canionAnimacion.add(this.cuerpoRecubrimentoCanionTanque);
         this.cuerpoCupulaTanque = new THREE.Mesh(cuerpoCupulaTanqueGeometria, material);
 
-        
-
-        // NODO ROTACION GIRAR CUERPO ANIMACION
+        // Nodo Girar Cuerpo Animacion
         this.cuerpoMiraTanqueGirar = new THREE.Object3D();
         this.cuerpoMiraTanqueGirar.add(this.cuerpoMiraTanque);
         this.cuerpoMiraTanqueGirar.add(this.canionAnimacion);
@@ -125,125 +106,35 @@ class Tanque extends THREE.Object3D {
         this.tanque.add(this.cuerpoRueda4);
         this.tanque.add(this.cuerpoRueda5);
 
-        //ESCALADO Y ORIENTACION TANQUE
+        //ESCALADO Y POSICIONAMIENTO DEL TANQUE
         this.tanque.scale.set(0.35, 0.35, 0.35);
         this.tanque.rotateY(Math.PI / 2);
 
 
-        
-
-        // NODO TRANSLACION Y
-        this.nodoTranslacionY = new THREE.Object3D();
-        this.nodoTranslacionY.add(this.tanque);
-        this.nodoTranslacionY.position.y += this.radio + 0.05;
-
-
-        //LUZ
+        //LUZ DEL TANQUE
         this.luz = new THREE.SpotLight(0xffffff);
         this.luz.power = 1000;
         this.luz.angle = Math.PI / 2;
         this.luz.penumbra = 1;
-        this.luz.position.set(0,10,0);
-        this.luz.target = this.nodoTranslacionY;
+        this.luz.position.set(0,15,0);
+        this.luz.target = this.tanque;
+
+        this.tanque.add(this.luz);
 
         //SOMBRA 
         this.luz.castShadow = true;
-        this.luz.shadow.mapSize.width = 1024;
-        this.luz.shadow.mapSize.height = 1024;
+        this.luz.shadow.mapSize.width = 512;
+        this.luz.shadow.mapSize.height = 512;
         this.luz.shadow.camera.near = 0.5;
         this.luz.shadow.camera.far = 500;
         this.luz.shadow.camera.fov = 30;
 
-        this.nodoTranslacionY.add(this.luz);
+        //Añaadir el tanque a la escena
+        this.add(this.tanque);
 
-
-        this.createCamara();
-
-        // NODO ROTACION Z
-        this.nodoRotacionZ = new THREE.Object3D();
-        this.nodoRotacionZ.add(this.nodoTranslacionY);
-        this.nodoRotacionZ.rotateZ(this.alfa);
-        // NODO POSICION Y ORIENTACION TUBO
-        this.nodoPosOrientTubo = new THREE.Object3D();
-        this.nodoPosOrientTubo.add(this.nodoRotacionZ);
-        var posTmp = this.path.getPointAt(this.origen.t);
-        this.nodoPosOrientTubo.position.copy(posTmp);
-
-        var tangente = this.path.getTangentAt(this.origen.t);
-        posTmp.add(tangente);
-        var segmentoActual = Math.floor(this.origen.t * this.segmentos);
-        this.nodoPosOrientTubo.up = this.tubo.binormals[segmentoActual];
-        this.nodoPosOrientTubo.lookAt(posTmp);
-
-        
-
-        this.add(this.nodoPosOrientTubo);
-
-        //ANIMACION DE RECORRIDO
         this.tiempo = 50000;
-        this.animacion = new TWEEN.Tween(this.origen).to(this.destino, this.tiempo)
-            .onUpdate(() => {
-                var posicion = this.path.getPointAt(this.origen.t);
-                this.nodoPosOrientTubo.position.copy(posicion);
-                var tangente = this.path.getTangentAt(this.origen.t);
-                posicion.add(tangente);
 
-                var segmentoActual = Math.floor(this.origen.t * this.segmentos);
-                this.nodoPosOrientTubo.up = this.tubo.binormals[segmentoActual];
-                this.nodoPosOrientTubo.lookAt(posicion);
-                // Si la posicion es el inicio aumento las vueltas en 1
-                if ((this.origen.t % 1) == 0) {
-                    this.aumentarContador();
-                    this.tiempo = this.tiempo * 0.9;
-                    if (this.tiempo < 20000) {
-                        this.tiempo = 20000;
-                    }
-                    this.animacion.duration(this.tiempo);
-                    console.log("Vueltas: " + this.contador_vueltas + " Tiempo: " + this.tiempo);
-                    escena.addObjetos();
-                    
-                }
-
-
-            })
-            .repeat(Infinity)
-            .start();
-
-        // Animación de rotación de la cabeza del tanque
         this.animacionRotacion();
-    }
-
-    pararAnimacion() {
-        this.animacion.stop();
-    }
-    
-    createCamara() {
-        this.camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 1000);
-        this.nodoTranslacionY.add(this.camera);
-        this.camera.position.set(0, 7, -20);
-        var puntoDeMiraRelativo = new THREE.Vector3(0, -1, 20);
-        var target = new THREE.Vector3(0, 0, 0);
-        this.camera.getWorldPosition(target);
-        target.add(puntoDeMiraRelativo);
-        this.camera.lookAt(target);
-    }
-
-    aumentarContador() {
-        this.contador_vueltas++;
-    }
-
-    getCameraPersonaje() {
-        return this.camera;
-    }
-
-    girarDerecha() {
-        this.alfa += 0.001;
-        this.nodoRotacionZ.rotateZ(this.alfa);
-    }
-
-    girarIzda() {
-        this.alfa += 0.001;
-        this.nodoRotacionZ.rotateZ(-this.alfa);
     }
 
     animacionRotacion() {

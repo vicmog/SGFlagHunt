@@ -6,17 +6,8 @@ import * as THREE from '../libs/three.module.js'
 import { GUI } from '../libs/dat.gui.module.js'
 import { TrackballControls } from '../libs/TrackballControls.js'
 
-// Clases de mi proyecto
+import { Tanque } from './Tanque.js';
 
-import { Grapadora } from './Grapadora.js'
-import { Cubo } from './Cubo.js'
-import { Cono } from './Cono.js'
-import { Torus } from './Torus.js'
-import { Cilindro } from './Cilindro.js'
-import { Esfera } from './Esfera.js'
-import { Icosaedro } from './Icosaedro.js'
-
- 
 /// La clase fachada del modelo
 /**
  * Usaremos una clase derivada de la clase Scene de Three.js para llevar el control de la escena y de todo lo que ocurre en ella.
@@ -48,29 +39,12 @@ class MyScene extends THREE.Scene {
     
     // Y unos ejes. Imprescindibles para orientarnos sobre dónde están las cosas
     // Todas las unidades están en metros
-    this.axis = new THREE.AxesHelper (0.1);
+    this.axis = new THREE.AxesHelper (10);
     this.add (this.axis);
-    
-    
-    // Por último creamos el modelo.
-    // El modelo puede incluir su parte de la interfaz gráfica de usuario. Le pasamos la referencia a 
-    // la gui y el texto bajo el que se agruparán los controles de la interfaz que añada el modelo.
-    //this.model = new Cubo(this.gui, "Controles del Cubo");
-    this.model = new Cubo(this.gui, "Controles del Cubo");
-    this.torus = new Torus(this.gui, "Controles del Torus");
-    this.cono = new Cono(this.gui, "Controles del Cono");
-    this.cilindro = new Cilindro(this.gui, "Controles del Cilindro");
-    this.esfera = new Esfera(this.gui, "Controles de la Esfera");
-    this.icosaedro = new Icosaedro(this.gui, "Controles del Icosaedro");
 
-    this.add(this.model);
-    this.add(this.torus);
-    this.add(this.cono);
-    this.add(this.cilindro);
-    this.add(this.esfera);
-    this.add(this.icosaedro);
-    
-    
+    this.tanque = new Tanque();
+    this.add(this.tanque);
+
   }
   
   createCamera () {
@@ -78,9 +52,9 @@ class MyScene extends THREE.Scene {
     //   El ángulo del campo de visión vértical en grados sexagesimales
     //   La razón de aspecto ancho/alto
     //   Los planos de recorte cercano y lejano
-    this.camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.01, 10);
+    this.camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 1000);
     // También se indica dónde se coloca
-    this.camera.position.set (0.2, 0.05, 0.2);
+    this.camera.position.set (20, 10, 20);
     // Y hacia dónde mira
     var look = new THREE.Vector3 (0,0,0);
     this.camera.lookAt(look);
@@ -233,13 +207,8 @@ class MyScene extends THREE.Scene {
     this.cameraControl.update();
     
     // Se actualiza el resto del modelo
-    this.model.update();
-    this.torus.update();
-    this.cono.update();
-    this.cilindro.update();
-    this.esfera.update();
-    this.icosaedro.update();
-    
+    //this.tanque.update();
+    this.tanque.update();
     // Este método debe ser llamado cada vez que queramos visualizar la escena de nuevo.
     // Literalmente le decimos al navegador: "La próxima vez que haya que refrescar la pantalla, llama al método que te indico".
     // Si no existiera esta línea,  update()  se ejecutaría solo la primera vez.
