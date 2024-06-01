@@ -29,7 +29,7 @@ class Estrella extends THREE.Object3D{
         return this.estrella;
     }
     
-    constructor(geometriaTubo,t){
+    constructor(geometriaTubo,t,a){
         super();
 
         this.tubo = geometriaTubo;
@@ -37,7 +37,7 @@ class Estrella extends THREE.Object3D{
         this.radio = geometriaTubo.parameters.radius;
         this.segmentos = geometriaTubo.parameters.tubularSegments;
         this.t = 0;
-        this.alfa = 0;
+        this.alfa = a;
 
 
         var material = new THREE.MeshStandardMaterial({

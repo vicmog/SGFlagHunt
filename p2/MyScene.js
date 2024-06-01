@@ -13,6 +13,9 @@ import { Botiquin } from './Botiquin.js';
 import { Misil } from './Misil.js';
 import { Estrella } from './Estrella.js'
 import { Dron } from './Dron.js'
+import { Bomba } from './Bomba.js'
+import { Bandera } from './Bandera.js'
+import { MuroBasico } from './MuroBasico.js';
 
  
 /// La clase fachada del modelo
@@ -41,13 +44,7 @@ class MyScene extends THREE.Scene {
     
     // Tendremos una cámara con un control de movimiento con el ratón
     this.createCamera ();
-    
-    
-    // Y unos ejes. Imprescindibles para orientarnos sobre dónde están las cosas
-    // Todas las unidades están en metros
-    /*this.axis = new THREE.AxesHelper (10);
-    this.add (this.axis);*/
-
+  
 
     this.createLights();
  
@@ -63,26 +60,25 @@ class MyScene extends THREE.Scene {
     this.luna.position.set(-100, 100, 10);
 
     this.candidatos = [];
-
-
-
-
-
+    this.objects = [];
+    this.pickableObjects = [this.luna,this.misil,this.misil2,this.misil3];
+    this.tengoEstrella = false;
 
     this.createRayos();
-
 
     // PICKING
     this.raton = new THREE.Vector2();
     this.raycasterRaton = new THREE.Raycaster();
   
+
+    // Objetos Variables
     this.addObjetos();
 
+
+    //Objetos fijos
     this.add(this.misil);
     this.add(this.misil2);
     this.add(this.misil3);
-
-    this.add(this.dron);
 
     this.add(this.luna);
     this.add(this.tanque);
@@ -101,8 +97,12 @@ class MyScene extends THREE.Scene {
   }
 
   updatePuntuacion(score) {
+    if(this.tengoEstrella){
+
+    }else{
     this.score += score;
     document.getElementById('score').innerText = 'Puntuacion: ' + this.score;
+    }
   }
   
   createCamera () {
@@ -369,10 +369,9 @@ class MyScene extends THREE.Scene {
         var obj = this.impactados[i][0].object;
 
         if(obj.parent.userData == "botiquin" && obj.parent.visible == true){
-          console.log("COLISION CON BOTIQUIN");
+          
           obj.parent.visible = false;
-          obj = obj.parent.parent.parent.parent.parent;
-          this.remove(obj);
+
           if(this.currentLife < this.maxLife){
             this.currentLife += 10;
             if(this.currentLife > this.maxLife){
@@ -380,19 +379,23 @@ class MyScene extends THREE.Scene {
             }
             this.updateLifeBar();
           }
+
         }else if(obj.parent.userData == "estrella" && obj.parent.visible == true){
-          console.log("COLISION CON ESTRELLA");
-          obj.parent.visible = false;
-          obj = obj.parent.parent.parent.parent.parent;
-          this.remove(obj);
-          this.currentLife -= 10;
-          this.updateLifeBar();
+          obj.parent.visible = false; 
+          this.tengoEstrella = true;
+
+          this.actualizaEstadoEstrella();
           this.updatePuntuacion(10);
+
+          this.starTimeout = setTimeout(() => {
+            this.tengoEstrella = false;
+            this.updateStarStatus();
+            console.log("Estrella desactivada");
+          }, 10000); 
           
         }else if(obj.parent.userData == "bomba" && obj.parent.visible == true){
           obj.parent.visible = false;
-          obj = obj.parent.parent.parent.parent.parent;
-          this.remove(obj);
+         
           this.currentLife -= 10;
           
           if(this.currentLife <= 0){
@@ -402,60 +405,112 @@ class MyScene extends THREE.Scene {
           }
 
           this.updateLifeBar();
+
         }else if(obj.parent.userData == "bandera" && obj.parent.visible == true){
           obj.parent.visible = false;
-          obj = obj.parent.parent.parent.parent.parent;
-          this.remove(obj);
           this.score += 10;
           this.updatePuntuacion(10);
+
+        }else if(obj.parent.userData == "muro" && obj.parent.visible == true){
+          obj.parent.visible = false;
+          this.currentLife -= 30;
+
+          if(this.currentLife <= 0){
+            this.currentLife = 0;
+            this.updateLifeBar();
+            this.showGameOver();
+          }
+
+          this.updateLifeBar();
         }
+
       }
     }
 }
 
+
+  actualizaEstadoEstrella(){
+    const starStatus = document.getElementById('starStatus');
+    starStatus.innerText = 'Estrella: ' + (this.tengoEstrella ? 'Sí' : 'No');
+  }
+
   addObjetos(){
 
-    //Numero aleatorio entre 0 y 1
-    let nAleatorio = Math.random();
-
-    this.botiquin = new Botiquin(this.tubo.getTubeGeometry(), nAleatorio);
-    nAleatorio = Math.random();
-    this.botiquin2 = new Botiquin(this.tubo.getTubeGeometry(), nAleatorio);
-    nAleatorio = Math.random();
-    this.botiquin3 = new Botiquin(this.tubo.getTubeGeometry(), nAleatorio);
-    nAleatorio = Math.random();
-    this.botiquin4 = new Botiquin(this.tubo.getTubeGeometry(), nAleatorio);
-    nAleatorio = Math.random();   
-    this.botiquin5 = new Botiquin(this.tubo.getTubeGeometry(), nAleatorio);
-
-    nAleatorio = Math.random();
-    this.estrella = new Estrella(this.tubo.getTubeGeometry(), nAleatorio);
-
-    nAleatorio = Math.random();
-    this.estrella2 = new Estrella(this.tubo.getTubeGeometry(), nAleatorio);
-
-    nAleatorio = Math.random();
-    this.estrella3 = new Estrella(this.tubo.getTubeGeometry(), nAleatorio);
-
-    this.candidatos.push(this.botiquin);
-    this.candidatos.push(this.botiquin2);
-    this.candidatos.push(this.botiquin3);
-    this.candidatos.push(this.botiquin4);
-    this.candidatos.push(this.botiquin5);
-    this.candidatos.push(this.estrella);
-    this.candidatos.push(this.estrella2);
-    this.candidatos.push(this.estrella3);
+    let nDron = 3;
+    let nBotiquin = 5;
+    let nBomba = 10;
+    let nEstrella = 10;
+    let nBanderas = 10;
+    let nMuros = 2;
 
 
-    this.add(this.botiquin);
-    this.add(this.botiquin2);
-    this.add(this.botiquin3);
-    this.add(this.botiquin4);
-    this.add(this.botiquin5);
+    for(let i=0;i<this.objects.length;i++){
+      this.remove(this.objects[i]);
+    }
 
-    this.add(this.estrella);
-    this.add(this.estrella2);
-    this.add(this.estrella3);
+    this.candidatos = [];
+    this.objects = [];
+    this.pickableObjects = [this.luna,this.misil,this.misil2,this.misil3];
+
+
+    
+    for(let i = 0; i < nDron; i++){
+      let nAleatorio = Math.random();
+      let dron = new Dron(this.tubo.getTubeGeometry(), nAleatorio);
+      this.pickableObjects.push(dron);
+      this.objects.push(dron);
+    }
+
+    for(let i = 0; i < nBotiquin; i++){
+      let nAleatorio = Math.random();
+      let angulo = Math.random() * 360;
+      let botiquin = new Botiquin(this.tubo.getTubeGeometry(), nAleatorio,angulo);
+
+      this.candidatos.push(botiquin);
+      this.objects.push(botiquin);
+    }
+
+    for(let i = 0; i < nBomba; i++){
+      let nAleatorio = Math.random();
+      let angulo = Math.random() * 360;
+      let bomba = new Bomba(this.tubo.getTubeGeometry(), nAleatorio,angulo);
+      this.candidatos.push(bomba);
+      this.objects.push(bomba);
+    }
+
+    for(let i = 0; i < nEstrella; i++){
+      let nAleatorio = Math.random();
+      let angulo = Math.random() * 360;
+      let estrella = new Estrella(this.tubo.getTubeGeometry(), nAleatorio,angulo);
+      this.candidatos.push(estrella);
+      this.objects.push(estrella);
+    }
+
+
+    let imgs = ['../imgs/marruecos.png','../imgs/spain.svg','../imgs/francia.png','../imgs/england.png','../imgs/italy.png'];
+
+    for(let i = 0; i < nBanderas; i++){
+      let nAleatorio = Math.random();
+      let angulo = Math.random() * 360;
+      let bandera = new Bandera(imgs[i%imgs.length],this.tubo.getTubeGeometry(), nAleatorio,angulo);
+      this.candidatos.push(bandera);
+      this.objects.push(bandera);
+    }
+
+    for(let i = 0; i < nMuros; i++){
+      let nAleatorio = Math.random();
+      let angulo = Math.random() * 360;
+      let muro = new MuroBasico(this.tubo.getTubeGeometry(), nAleatorio,angulo);
+      this.candidatos.push(muro);
+      this.objects.push(muro);
+    }
+
+
+    for(let i = 0; i < this.objects.length; i++){
+      this.add(this.objects[i]);
+    }
+
+
   }
 
 
@@ -472,21 +527,18 @@ class MyScene extends THREE.Scene {
     this.raton.x = (event.clientX / window.innerWidth) * 2 - 1;
     this.raton.y = 1 - 2 * (event.clientY / window.innerHeight);
     this.raycasterRaton.setFromCamera(this.raton, this.getCamera());
-    var pickableObjects = [this.luna,this.misil,this.misil2,this.misil3,this.dron];
     
-    var pickedObjects = this.raycasterRaton.intersectObjects(pickableObjects, true);
+    var pickedObjects = this.raycasterRaton.intersectObjects(this.pickableObjects, true);
 
     if (pickedObjects.length > 0) { 
         var objeto = pickedObjects[0].object;
-        var selectedPoint = pickedObjects[0].point;
         while (objeto.parent && objeto.parent !== this) {
           objeto = objeto.parent;
         }
       
       // Ahora `objeto` es el primer padre del objeto seleccionado
         objeto.visible = false;
-        console.log(objeto);
-        console.log(selectedPoint);
+        this.updatePuntuacion(30);
     }
   }
   // Funcion para el movimiento del tanque
@@ -530,10 +582,15 @@ class MyScene extends THREE.Scene {
     // Se actualiza el resto del modelo
     this.tubo.update();
     this.tanque.update();
-    this.dron.update();
-    this.estrella.update();
-    this.estrella2.update();
-    this.estrella3.update();
+
+     // Actualiza cada objeto que tiene un método update
+     this.objects.forEach(obj => {
+      if (typeof obj.update === 'function') {
+        obj.update();
+      }
+    });
+
+   
 
 
     // Este método debe ser llamado cada vez que queramos visualizar la escena de nuevo.

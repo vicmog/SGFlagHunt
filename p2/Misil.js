@@ -76,6 +76,8 @@ class Misil extends THREE.Object3D {
         this.misil.add(this.pata3);
         this.misil.add(this.pata4);
 
+        this.misil.userData = "misil";
+
         this.misil.scale.set(0.5, 0.5, 0.5);
         this.misil.rotateX(-Math.PI / 2);
 

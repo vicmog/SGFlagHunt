@@ -42,7 +42,7 @@ class MyScene extends THREE.Scene {
     this.axis = new THREE.AxesHelper (10);
     this.add (this.axis);
 
-    this.bandera = new Bandera('../imgs/spain.svg');
+    this.bandera = new Bandera('../imgs/marruecos.png');
     this.add(this.bandera);
 
   }

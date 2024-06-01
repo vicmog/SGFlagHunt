@@ -2,12 +2,12 @@ import * as THREE from 'three';
 import {CSG} from '../libs/CSG-v2.js';
 
 class Botiquin extends THREE.Object3D{
-    asignarPos(geometriaTubo, t){
+    asignarPos(geometriaTubo, t,a){
         this.tubo = geometriaTubo;
         this.path = geometriaTubo.parameters.path;
         this.radio = geometriaTubo.parameters.radius;
         this.segmentos = geometriaTubo.parameters.tubularSegments;
-        this.alfa = 0;
+        this.alfa = a;
 
         // NODO TRASLACION Y
         var nodoTraslacionY = new THREE.Object3D();
@@ -78,7 +78,8 @@ class Botiquin extends THREE.Object3D{
         var cruz = csg.toMesh(material);
         return cruz;
     }
-    constructor(geometriaTubo, t){
+
+    constructor(geometriaTubo, t,a){
         super();
         var material = new THREE.MeshNormalMaterial();
         var colorBlanco = new THREE.Color(1,1,1);
@@ -108,16 +109,13 @@ class Botiquin extends THREE.Object3D{
         this.botiquin.scale.set(0.5, 0.5, 0.5);
         this.botiquin.userData = "botiquin";
 
-        this.nodoPos = this.asignarPos(geometriaTubo, t);
+        this.nodoPos = this.asignarPos(geometriaTubo, t,a);
         this.add(this.nodoPos);
 
         this.castShadow = true;
         this.receiveShadow = true;
 
-        /*this.traverseVisible((unNodo) => {
-            unNodo.castShadow = true;
-            unNodo.receiveShadow = true;
-        });*/
+
         
 
     }
