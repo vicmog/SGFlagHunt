@@ -30,7 +30,9 @@ class Tanque extends THREE.Object3D {
         this.radio = geometriaTubo.parameters.radius;
         this.segmentos = geometriaTubo.parameters.tubularSegments;
         this.t = 0;
-        this.alfa = 0;
+        // Variable para la rotación del tanque
+        this.alfa = Math.PI / 200;
+        // Contador de vueltas del tanque
         this.contador_vueltas = 0;
 
         this.camera = null;
@@ -237,12 +239,10 @@ class Tanque extends THREE.Object3D {
     }
 
     girarDerecha() {
-        this.alfa += 0.001;
         this.nodoRotacionZ.rotateZ(this.alfa);
     }
 
     girarIzda() {
-        this.alfa += 0.001;
         this.nodoRotacionZ.rotateZ(-this.alfa);
     }
 
