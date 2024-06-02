@@ -120,7 +120,7 @@ class Misil extends THREE.Object3D {
 
                 if (this.origen.t == 0) {
                     console.log("Misil visible");
-                    this.visible = true;
+                    this.parent.visible = true;
                 }
                 var segmentoActual = Math.floor(this.origen.t * this.segmentos);
                 this.nodoPosOrientTubo.up = this.tubo.binormals[segmentoActual];

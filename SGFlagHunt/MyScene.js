@@ -52,16 +52,14 @@ class MyScene extends THREE.Scene {
     this.tubo = new Tubo();
     this.tanque = new Tanque(this.tubo.getTubeGeometry(),this);
     this.luna = new Luna();
-    this.misil = new Misil(this.tubo.getTubeGeometry(),0,0);
-    this.misil2 = new Misil(this.tubo.getTubeGeometry(),0.5,200);
-    this.misil3 = new Misil(this.tubo.getTubeGeometry(),0.7,100);
-    this.dron = new Dron(this.tubo.getTubeGeometry(),0.5);
+  
+    ;
     // Mover la luna
     this.luna.position.set(-100, 100, 10);
 
     this.candidatos = [];
     this.objects = [];
-    this.pickableObjects = [this.luna,this.misil,this.misil2,this.misil3];
+    this.pickableObjects = [this.luna];
     this.tengoEstrella = false;
 
     this.createRayos();
@@ -73,12 +71,6 @@ class MyScene extends THREE.Scene {
 
     // Objetos Variables
     this.addObjetos();
-
-
-    //Objetos fijos
-    this.add(this.misil);
-    this.add(this.misil2);
-    this.add(this.misil3);
 
     this.add(this.luna);
     this.add(this.tanque);
@@ -452,7 +444,10 @@ class MyScene extends THREE.Scene {
     let nEstrella = 1;
     let nBanderas = 20;
     let nMuros = 5;
+    let nMisiles = 3;
 
+
+   
 
     for(let i=0;i<this.objects.length;i++){
       this.remove(this.objects[i]);
@@ -460,9 +455,14 @@ class MyScene extends THREE.Scene {
 
     this.candidatos = [];
     this.objects = [];
-    this.pickableObjects = [this.luna,this.misil,this.misil2,this.misil3];
+    this.pickableObjects = [this.luna];
 
-
+    for(let i = 0; i < nMisiles; i++){
+      let nAleatorio = Math.random()*360;
+      let misil = new Misil(this.tubo.getTubeGeometry(),nAleatorio,nAleatorio);
+      this.pickableObjects.push(misil);
+      this.objects.push(misil);
+    }
     
     for(let i = 0; i < nDron; i++){
       let nAleatorio = Math.random();
@@ -542,12 +542,12 @@ class MyScene extends THREE.Scene {
 
     if (pickedObjects.length > 0) { 
         var objeto = pickedObjects[0].object;
-        while (objeto.parent && objeto.parent !== this) {
+        /*while (objeto.parent && objeto.parent !== this) {
           objeto = objeto.parent;
-        }
+        }*/
       
-      // Ahora `objeto` es el primer padre del objeto seleccionado
-        objeto.visible = false;
+      
+        objeto.parent.visible = false;
         this.updatePuntuacion(30);
     }
   }
