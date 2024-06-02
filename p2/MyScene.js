@@ -98,11 +98,12 @@ class MyScene extends THREE.Scene {
 
   updatePuntuacion(score) {
     if(this.tengoEstrella){
-
+      this.score += score * 2;
     }else{
-    this.score += score;
-    document.getElementById('score').innerText = 'Puntuacion: ' + this.score;
+      this.score += score;
     }
+    document.getElementById('score').innerText = 'Puntuacion: ' + this.score;
+
   }
   
   createCamera () {
@@ -382,51 +383,60 @@ class MyScene extends THREE.Scene {
 
         }else if(obj.parent.userData == "estrella" && obj.parent.visible == true){
           obj.parent.visible = false; 
-          this.tengoEstrella = true;
 
+          this.tengoEstrella = true;
           this.actualizaEstadoEstrella();
           this.updatePuntuacion(10);
-
-          this.starTimeout = setTimeout(() => {
-            this.tengoEstrella = false;
-            this.updateStarStatus();
-            console.log("Estrella desactivada");
-          }, 10000); 
+          this.desabilitarEstrella();
           
         }else if(obj.parent.userData == "bomba" && obj.parent.visible == true){
           obj.parent.visible = false;
-         
-          this.currentLife -= 10;
-          
-          if(this.currentLife <= 0){
-            this.currentLife = 0;
-            this.updateLifeBar();
-            this.showGameOver();
-          }
 
-          this.updateLifeBar();
+         if(!this.tengoEstrella){
+            this.currentLife -= 10;
+            
+            if(this.currentLife <= 0){
+              this.currentLife = 0;
+              this.updateLifeBar();
+              this.showGameOver();
+            }
+
+            this.updateLifeBar();
+         }
+         
 
         }else if(obj.parent.userData == "bandera" && obj.parent.visible == true){
           obj.parent.visible = false;
-          this.score += 10;
           this.updatePuntuacion(10);
 
         }else if(obj.parent.userData == "muro" && obj.parent.visible == true){
           obj.parent.visible = false;
-          this.currentLife -= 30;
+          if(!this.tengoEstrella){
+            this.currentLife -= 30;
 
-          if(this.currentLife <= 0){
-            this.currentLife = 0;
+            if(this.currentLife <= 0){
+              this.currentLife = 0;
+              this.updateLifeBar();
+              this.showGameOver();
+            }
+  
             this.updateLifeBar();
-            this.showGameOver();
           }
-
-          this.updateLifeBar();
+          
         }
 
       }
     }
 }
+
+
+
+  desabilitarEstrella(){
+    setTimeout(() => {
+      this.tengoEstrella = false;
+      this.actualizaEstadoEstrella();
+    }, 10000);
+  }
 
 
   actualizaEstadoEstrella(){
@@ -439,9 +449,9 @@ class MyScene extends THREE.Scene {
     let nDron = 3;
     let nBotiquin = 5;
     let nBomba = 10;
-    let nEstrella = 10;
+    let nEstrella = 1;
     let nBanderas = 10;
-    let nMuros = 2;
+    let nMuros = 20;
 
 
     for(let i=0;i<this.objects.length;i++){

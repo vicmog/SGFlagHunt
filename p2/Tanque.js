@@ -31,7 +31,7 @@ class Tanque extends THREE.Object3D {
         this.segmentos = geometriaTubo.parameters.tubularSegments;
         this.t = 0;
         // Variable para la rotación del tanque
-        this.alfa = Math.PI / 200;
+        this.alfa = 0.1;
         // Contador de vueltas del tanque
         this.contador_vueltas = 0;
 
@@ -258,6 +258,7 @@ class Tanque extends THREE.Object3D {
             .repeat(Infinity)
             .start();
     }
+    
 
     update() {
 
