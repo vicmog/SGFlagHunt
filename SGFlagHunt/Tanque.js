@@ -1,6 +1,6 @@
 import * as THREE from 'three';
 import {CSG} from '../libs/CSG-v2.js';
-import { Tubo } from '../p2/tubo.js';
+import { Tubo } from './tubo.js';
 import * as TWEEN from '../libs/tween.esm.js';
 
 class Tanque extends THREE.Object3D {

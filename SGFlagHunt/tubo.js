@@ -1,5 +1,4 @@
 import * as THREE from 'three';
-import { Tanque } from '../objetosP2/Tanque.js'
 
 class Tubo extends THREE.Object3D {
     constructor() {

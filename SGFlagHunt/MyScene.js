@@ -447,11 +447,11 @@ class MyScene extends THREE.Scene {
   addObjetos(){
 
     let nDron = 3;
-    let nBotiquin = 5;
-    let nBomba = 10;
+    let nBotiquin = 6;
+    let nBomba = 12;
     let nEstrella = 1;
-    let nBanderas = 10;
-    let nMuros = 20;
+    let nBanderas = 20;
+    let nMuros = 5;
 
 
     for(let i=0;i<this.objects.length;i++){
@@ -497,7 +497,7 @@ class MyScene extends THREE.Scene {
     }
 
 
-    let imgs = ['../imgs/marruecos.png','../imgs/spain.svg','../imgs/francia.png','../imgs/england.png','../imgs/italy.png'];
+    let imgs = ['../imgs/marruecos.png','../imgs/spain.svg','../imgs/francia.png','../imgs/england.png','../imgs/italy.jpg'];
 
     for(let i = 0; i < nBanderas; i++){
       let nAleatorio = Math.random();
