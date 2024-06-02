@@ -281,22 +281,6 @@ class MyScene extends THREE.Scene {
     for(let i = 0; i < this.rayos.length; i++){
       this.impactados.push(this.rayos[i].intersectObjects(this.candidatos, true));
     }
-
-    for(let i = 0; i < this.impactados.length; i++){
-      if(this.impactados[i].length > 0){
-        var obj = this.impactados[i][0].object;
-        if(obj.parent.userData == "botiquin" && obj.parent.visible == true){
-          obj.parent.visible = false;
-        }
-
-        if(obj.parent.userData == "estrella"){
-          obj = obj.parent.parent.parent.parent.parent;
-          this.remove(obj);
-          this.currentLife -= 10;
-          this.updateLifeBar();
-        }
-      }
-    }
     
   }
   
@@ -443,7 +427,7 @@ class MyScene extends THREE.Scene {
     let nBomba = 12;
     let nEstrella = 1;
     let nBanderas = 20;
-    let nMuros = 5;
+    let nMuros = 3;
     let nMisiles = 3;
 
 
